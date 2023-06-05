@@ -1,5 +1,5 @@
 # Project configuration
-PROJECT_NAME = social-response-classifier
+PROJECT_NAME = chatup-db-api
 
 # General Parameters
 TOPDIR = $(shell git rev-parse --show-toplevel)
@@ -16,7 +16,7 @@ help: # Display help
 
 run: ## Start the service locally
 	cd $(TOPDIR) && \
-	FLASK_APP=chat_up.app.py \
+	FLASK_APP=chatup.app.py \
 	flask run --no-debugger --no-reload -p 8000
 
 build-docker: ## Build the docker image

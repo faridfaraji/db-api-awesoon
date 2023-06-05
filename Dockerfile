@@ -1,12 +1,10 @@
 FROM continuumio/miniconda3 as base
 
-LABEL maintainer="Korbit ML Apps"
-LABEL description="Template for ML apps"
 
 # Directory Creation
-ENV APP_ROOT /opt/korbit
+ENV APP_ROOT /opt/app
 RUN mkdir $APP_ROOT && \
-    mkdir /etc/korbit
+    mkdir /etc/app
 WORKDIR $APP_ROOT
 
 
@@ -15,7 +13,7 @@ COPY ./environment.yml $APP_ROOT/
 
 RUN conda env create --quiet --force environment.yml
 RUN conda clean --quiet --all --yes
-SHELL ["conda", "run", "-n", "social-response-classifier", "/bin/bash", "-c"]
+SHELL ["conda", "run", "-n", "chatup-db-api", "/bin/bash", "-c"]
 
 FROM requirements as container
 COPY . .

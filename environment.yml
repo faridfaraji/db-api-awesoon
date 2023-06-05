@@ -1,0 +1,22 @@
+name: chatup-db-api
+channels:
+        - conda-forge
+dependencies:
+        - flask-restx
+        - flask
+        - flask_cors
+        - gevent
+        - gunicorn
+        - marshmallow
+        - pip
+        - psycopg2-binary<2.10
+        - sqlalchemy<2.0.4
+        - pytest
+        - python=3.9
+        - werkzeug=2.1.2
+        - pip:
+                - config-probe
+                - pytest-cov
+                - ShopifyAPI
+                - tox-conda
+

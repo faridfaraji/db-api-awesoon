@@ -1,0 +1,17 @@
+name: chat-up
+channels:
+        - conda-forge
+dependencies:
+        - flask-restx
+        - flask=2.1.2
+        - gevent
+        - gunicorn
+        - marshmallow
+        - pip
+        - pytest
+        - python=3.9
+        - werkzeug=2.1.2
+        - pip:
+                - config-probe
+                - pytest-cov
+                - tox-conda

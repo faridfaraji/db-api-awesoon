@@ -31,5 +31,5 @@ How to use it
 Launch these commands to run the flask service:
 
 ```sh
-make run-local
+make run
 ```

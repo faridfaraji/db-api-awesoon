@@ -5,11 +5,11 @@ from flask_restx import Namespace, Resource
 from sqlalchemy import select
 from flask_restx import Namespace, Resource, marshal
 
-from chatup.api.model.shops import shop
-from chatup.core.database.shops import get_shop_with_shopify_id, upsert_shop, upsert_shop_negative_keyword
+from chatup.api.model.shops import shop, negative_keywords
+from chatup.core.database.shops import delete_negative_keyword, get_keywords_for_shop, get_shop_with_shopify_id, upsert_shop, upsert_shop_negative_keyword
 from chatup.core.exceptions import ShopNotFoundError
 from chatup.model.schema import Session
-from chatup.model.schema.shop import NegativKeyWord, NegativeKeyWord, Shop
+from chatup.model.schema.shop import NegativeKeyWord, NegativeKeyWord, Shop
 ns = Namespace(
     "shops", "This namespace is resposible for retrieving and storing the shops info.")
 
@@ -62,24 +62,20 @@ class SingleShop(Resource):
 
 @ns.route("/<id>/negative-keywords")
 class NegativeKeyWords(Resource):
-    def get(self):
+    def get(self, id):
         with Session() as session:
-            query = select(NegativeKeyWord)
-            words = session.scalars(query).all()
-            marshalled_shops = marshal(words, shop_model)
-        return marshalled_shops, 200
+            keywords = get_keywords_for_shop(session, id)
+            return keywords, 200
 
 
 @ns.route("/<id>/negative-keywords/<word>")
 class SingleNegativeKeyWord(Resource):
-
-    @ns.expect(shop_parser)
     def put(self, id, word):
         with Session() as session:
             try:
                 upsert_shop_negative_keyword(session, word, id)
                 session.commit()
-                return id, 200
+                return {"message": "SUCCESS"}, 200
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)

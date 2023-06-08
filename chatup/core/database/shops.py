@@ -20,14 +20,16 @@ def upsert_shop(session, shop_id, data):
         for field in data:
             setattr(shop, field, data[field])
     except ShopNotFoundError:
-        shop = Shop(**data, shop_id=shop_id)
+        shop = Shop(**data, shop_identifier=shop_id)
     session.add(shop)
     return shop
 
 
 def upsert_shop_negative_keyword(session, word, shop_id):
+    
     shop = get_shop_with_shopify_id(session, shop_id)
-    shop.negative_keywords.append(word)
+    new_shop_negative_keyword = ShopNegativeKeyWord(shop=shop, negative_keyword=NegativeKeyWord(word=word))
+    session.add(new_shop_negative_keyword)
     return shop
 
 
@@ -41,3 +43,14 @@ def delete_negative_keyword(session, word: str, shop_id: int):
             ).filter_by(word=word).scalar()
         )
     session.execute(query)
+
+
+def get_keywords_for_shop(session, shop_identifier):
+    query = select(NegativeKeyWord.word).join(
+        ShopNegativeKeyWord, ShopNegativeKeyWord.nk_id == NegativeKeyWord.id
+        ).join(
+        Shop, Shop.id == ShopNegativeKeyWord.shop_id
+        ).where(
+            Shop.shop_identifier == shop_identifier
+        )
+    return session.scalars(query).all()

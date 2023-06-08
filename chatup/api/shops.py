@@ -5,7 +5,7 @@ from flask_restx import Namespace, Resource
 from sqlalchemy import select
 from flask_restx import Namespace, Resource, marshal
 
-from chatup.api.model.shops import shop, negative_keywords
+from chatup.api.model.shops import shop
 from chatup.core.database.shops import delete_negative_keyword, get_keywords_for_shop, get_shop_with_shopify_id, upsert_shop, upsert_shop_negative_keyword
 from chatup.core.exceptions import ShopNotFoundError
 from chatup.model.schema import Session

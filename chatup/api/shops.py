@@ -83,7 +83,7 @@ class SingleNegativeKeyWord(Resource):
     def delete(self, id, word):
         with Session() as session:
             try:
-                delete_negative_keyword(session, id, word)
+                delete_negative_keyword(session, word, id)
                 session.commit()
                 return id, 200
             except Exception as e:

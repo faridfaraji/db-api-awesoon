@@ -1,56 +1,72 @@
 
-
-
-from sqlalchemy import delete, select
+from sqlalchemy import and_, delete, select
 from chatup.core.exceptions import ShopNotFoundError
 from chatup.model.schema.shop import NegativeKeyWord, Shop, ShopNegativeKeyWord
 
 
-def get_shop_with_shopify_id(session, shop_id):
-    query = select(Shop).where(Shop.shop_identifier == shop_id)
+def get_shop_with_shopify_id(session, shop_identifier: int):
+    query = select(Shop).where(Shop.shop_identifier == shop_identifier)
     shop = session.scalars(query).first()
     if shop is None:
         raise ShopNotFoundError
     return shop
 
 
-def upsert_shop(session, shop_id, data):
+def upsert_shop(session, shop_identifier: int, data: dict):
     try:
-        shop = get_shop_with_shopify_id(session, shop_id)
+        shop = get_shop_with_shopify_id(session, shop_identifier)
         for field in data:
             setattr(shop, field, data[field])
     except ShopNotFoundError:
-        shop = Shop(**data, shop_identifier=shop_id)
+        shop = Shop(**data, shop_identifier=shop_identifier)
     session.add(shop)
     return shop
 
 
-def upsert_shop_negative_keyword(session, word, shop_id):
-    
-    shop = get_shop_with_shopify_id(session, shop_id)
-    new_shop_negative_keyword = ShopNegativeKeyWord(shop=shop, negative_keyword=NegativeKeyWord(word=word))
-    session.add(new_shop_negative_keyword)
+def upsert_keyword(session, word: str):
+    query = select(NegativeKeyWord).where(NegativeKeyWord.word == word)
+    result = session.scalars(query).first()
+    if result:
+        return result
+    else:
+        return NegativeKeyWord(word=word)
+
+
+def upsert_shop_negative_keyword(session, word: str, shop_identifier: int):
+    shop = get_shop_with_shopify_id(session, shop_identifier)
+    session.add(upsert_keyword(session, word))
+    query = select(ShopNegativeKeyWord).where(
+        and_(ShopNegativeKeyWord.negative_keyword == word), (ShopNegativeKeyWord.shop_id == shop.id))
+    result = session.scalars(query).first()
+    if not result:
+        new_shop_negative_keyword = ShopNegativeKeyWord(shop_id=shop.id, negative_keyword=word)
+        session.add(new_shop_negative_keyword)
     return shop
 
 
-def delete_negative_keyword(session, word: str, shop_id: int):
-    query = delete(
-                ShopNegativeKeyWord
-        ).where(
-            ShopNegativeKeyWord.shop_id == shop_id,
-            ShopNegativeKeyWord.nk_id == session.query(
-                NegativeKeyWord.id
-            ).filter_by(word=word).scalar()
+def delete_negative_keyword(session, word: str, shop_identifier: int):
+    shop = get_shop_with_shopify_id(session, shop_identifier)
+    query = delete(ShopNegativeKeyWord).where(and_(
+            ShopNegativeKeyWord.shop_id == shop.id
+        ),
+        (
+            ShopNegativeKeyWord.negative_keyword == word
         )
+    )
     session.execute(query)
 
 
-def get_keywords_for_shop(session, shop_identifier):
-    query = select(NegativeKeyWord.word).join(
-        ShopNegativeKeyWord, ShopNegativeKeyWord.nk_id == NegativeKeyWord.id
-        ).join(
-        Shop, Shop.id == ShopNegativeKeyWord.shop_id
-        ).where(
-            Shop.shop_identifier == shop_identifier
-        )
-    return session.scalars(query).all()
+def get_keywords_for_shop(session, shop_identifier: int):
+    shop = get_shop_with_shopify_id(session, shop_identifier)
+    result = []
+    for shopKw in shop.negative_keywords:
+        result.append(shopKw.negative_keyword)
+    return result
+    # query = select(NegativeKeyWord.word).join(
+    #     ShopNegativeKeyWord, ShopNegativeKeyWord.nk_id == NegativeKeyWord.id
+    # ).join(
+    #     Shop, Shop.id == ShopNegativeKeyWord.shop_id
+    # ).where(
+    #     Shop.shop_identifier == shop_identifier
+    # )
+    # return session.scalars(query).all()

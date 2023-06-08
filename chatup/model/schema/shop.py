@@ -4,21 +4,14 @@ from sqlalchemy.orm import relationship
 
 
 class ShopNegativeKeyWord(Base):
-    __tablename__ = "shop_nk_association"
-    nk_id = Column(ForeignKey('negative_keywords.id'), primary_key=True)
-    shop_id = Column(ForeignKey('shops.id'), primary_key=True)
-    shop = relationship("Shop", back_populates="negative_keywords")
-    negative_keyword = relationship("NegativeKeyWord", back_populates="shops")
+    __tablename__ = "shop_nk_associations"
+    shop_id = Column(ForeignKey("shops.id"), primary_key=True)
+    negative_keyword = Column(ForeignKey("negative_keywords.word"), primary_key=True)
 
 
 class NegativeKeyWord(Base):
     __tablename__ = "negative_keywords"
-    id = Column(Integer, primary_key=True)
-    word = Column(String, unique=True)
-    shops = relationship(
-        "ShopNegativeKeyWord",
-        back_populates="negative_keyword",
-    )
+    word = Column(String, primary_key=True)
 
 
 class Shop(Base):
@@ -31,5 +24,5 @@ class Shop(Base):
     description = Column(String)
     negative_keywords = relationship(
         "ShopNegativeKeyWord",
-        back_populates="shop",
+        foreign_keys=[ShopNegativeKeyWord.shop_id],
     )

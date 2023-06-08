@@ -1,4 +1,4 @@
-from chatup.model import Base
+from awesoon.model import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 

@@ -5,11 +5,11 @@ from flask_restx import Namespace, Resource
 from sqlalchemy import select
 from flask_restx import Namespace, Resource, marshal
 
-from chatup.api.model.shops import shop
-from chatup.core.database.shops import delete_negative_keyword, get_keywords_for_shop, get_shop_with_shopify_id, upsert_shop, upsert_shop_negative_keyword
-from chatup.core.exceptions import ShopNotFoundError
-from chatup.model.schema import Session
-from chatup.model.schema.shop import NegativeKeyWord, NegativeKeyWord, Shop
+from awesoon.api.model.shops import shop
+from awesoon.core.database.shops import delete_negative_keyword, get_keywords_for_shop, get_shop_with_identifier, upsert_shop, upsert_shop_negative_keyword
+from awesoon.core.exceptions import ShopNotFoundError
+from awesoon.model.schema import Session
+from awesoon.model.schema.shop import NegativeKeyWord, NegativeKeyWord, Shop
 ns = Namespace(
     "shops", "This namespace is resposible for retrieving and storing the shops info.")
 
@@ -41,7 +41,7 @@ class SingleShop(Resource):
     def get(self, id):
         try:
             with Session() as session:
-                shop = get_shop_with_shopify_id(session, id)
+                shop = get_shop_with_identifier(session, id)
                 marshalled_shop = marshal(shop, shop_model)
             return marshalled_shop, 200
         except ShopNotFoundError:

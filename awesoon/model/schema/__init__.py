@@ -1,10 +1,10 @@
-from chatup.model import Base
+from awesoon.model import Base
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import MetaData
-from chatup.model.schema import shop
+from awesoon.model.schema import shop
 username = os.environ["DB_USERNAME"]
 password = os.environ["DB_PASSWORD"]
 dbname = os.environ["DB_NAME"]

@@ -13,7 +13,7 @@ COPY ./environment.yml $APP_ROOT/
 
 RUN conda env create --quiet --force environment.yml
 RUN conda clean --quiet --all --yes
-SHELL ["conda", "run", "-n", "chatup-db-api", "/bin/bash", "-c"]
+SHELL ["conda", "run", "-n", "db-api", "/bin/bash", "-c"]
 
 FROM requirements as container
 COPY . .

@@ -1,5 +1,5 @@
 # Project configuration
-PROJECT_NAME = chatup-db-api
+PROJECT_NAME = awesoon-db-api
 
 # General Parameters
 TOPDIR = $(shell git rev-parse --show-toplevel)
@@ -16,7 +16,7 @@ help: # Display help
 
 run: ## Start the service locally
 	cd $(TOPDIR) && \
-	FLASK_APP=chatup.app.py \
+	FLASK_APP=awesoon.app.py \
 	flask run --no-debugger --no-reload -p $(PORT)
 
 build-docker: ## Build the docker image

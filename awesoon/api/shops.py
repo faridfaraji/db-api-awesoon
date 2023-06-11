@@ -41,7 +41,7 @@ class SingleShop(Resource):
     def get(self, id):
         try:
             with Session() as session:
-                shop = get_shop_with_identifier(session, id)
+                shop = get_shop_with_identifier(session, int(id))
                 marshalled_shop = marshal(shop, shop_model)
             return marshalled_shop, 200
         except ShopNotFoundError:
@@ -52,7 +52,7 @@ class SingleShop(Resource):
         data = shop_parser.parse_args()
         with Session() as session:
             try:
-                upsert_shop(session, id, data)
+                upsert_shop(session, int(id), data)
                 session.commit()
                 return id, 200
             except Exception as e:
@@ -64,7 +64,7 @@ class SingleShop(Resource):
 class NegativeKeyWords(Resource):
     def get(self, id):
         with Session() as session:
-            keywords = get_keywords_for_shop(session, id)
+            keywords = get_keywords_for_shop(session, int(id))
             return keywords, 200
 
 
@@ -73,7 +73,7 @@ class SingleNegativeKeyWord(Resource):
     def put(self, id, word):
         with Session() as session:
             try:
-                upsert_shop_negative_keyword(session, word, id)
+                upsert_shop_negative_keyword(session, word, int(id))
                 session.commit()
                 return {"message": "SUCCESS"}, 200
             except Exception as e:
@@ -83,7 +83,7 @@ class SingleNegativeKeyWord(Resource):
     def delete(self, id, word):
         with Session() as session:
             try:
-                delete_negative_keyword(session, word, id)
+                delete_negative_keyword(session, word, int(id))
                 session.commit()
                 return id, 200
             except Exception as e:

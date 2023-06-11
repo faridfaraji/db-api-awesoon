@@ -1,5 +1,5 @@
 from awesoon.model import Base
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import BigInteger, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 
@@ -18,7 +18,7 @@ class Shop(Base):
     __tablename__ = "shops"
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    shop_identifier = Column(Integer, unique=True)
+    shop_identifier = Column(BigInteger, unique=True)
     shop_url = Column(String)
     access_token = Column(String)
     description = Column(String)

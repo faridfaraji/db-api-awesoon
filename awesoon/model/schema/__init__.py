@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import MetaData
-from awesoon.model.schema import shop
+from awesoon.model.schema import shop, prompt
 username = os.environ["DB_USERNAME"]
 password = os.environ["DB_PASSWORD"]
 dbname = os.environ["DB_NAME"]

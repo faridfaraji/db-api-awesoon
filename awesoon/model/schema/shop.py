@@ -21,8 +21,10 @@ class Shop(Base):
     shop_identifier = Column(BigInteger, unique=True)
     shop_url = Column(String)
     access_token = Column(String)
-    description = Column(String)
     negative_keywords = relationship(
         "ShopNegativeKeyWord",
         foreign_keys=[ShopNegativeKeyWord.shop_id],
     )
+    prompt_id = Column(ForeignKey("prompts.id"))
+    prompt = relationship("Prompt", foreign_keys=[prompt_id])
+

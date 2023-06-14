@@ -9,7 +9,7 @@ from langchain.vectorstores.pgvector import EmbeddingStore, CollectionStore, PGV
 
 def get_shop_docs(session: Session, shop_id: int):
     query = select(
-        EmbeddingStore.document, EmbeddingStore.embedding
+        EmbeddingStore.document, EmbeddingStore.embedding, Shop.docs_version
     ).join(
         CollectionStore, EmbeddingStore.collection_id == CollectionStore.uuid
     ).join(
@@ -21,17 +21,20 @@ def get_shop_docs(session: Session, shop_id: int):
     processed_result = []
     for item in result:
         processed_result.append(
-            (item[0], [float(value) for value in item[1]])
+            {
+                "document": item[0],
+                "embedding": [float(value) for value in item[1]],
+                "docs_version": item[2]
+            }
         )
-
     return processed_result
 
 
 def add_shop_docs(session: Session, shop_doc: dict, shop_id: int):
     shop: Shop = get_shop_with_identifier(session, shop_id)
-    embedding = [1] * 1536
-    doc = shop_doc["doc"]
-    version = shop_doc["version"]
+    embedding = shop_doc["embedding"]
+    doc = shop_doc["document"]
+    version = shop_doc["docs_version"]
     pre_delete_collection = False
     if shop.docs_version != version:
         pre_delete_collection = True

@@ -35,17 +35,17 @@ shop_parser.add_argument("shop_url", type=str, default=None, location="json")
 shop_parser.add_argument("access_token", type=str, default=None, location="json")
 
 doc_parser = ns.parser()
-doc_parser.add_argument("doc", type=str, default=None, location="json")
+doc_parser.add_argument("document", type=str, default=None, location="json")
 doc_parser.add_argument("embedding", type=list, default=None, location="json")
-doc_parser.add_argument("version", type=str, default=None, location="json")
+doc_parser.add_argument("docs_version", type=str, default=None, location="json")
 
 
 doc_model = ns.model(
     "doc",
     {
-        "doc": fields.String(),
+        "document": fields.String(),
         "embedding": fields.List(fields.Float, required=False, default=[]),
-        "version": fields.String()
+        "docs_version": fields.String()
     },
 )
 
@@ -122,7 +122,7 @@ class ShopDoc(Resource):
             try:
                 docs = get_shop_docs(session, id)
                 session.commit()
-                return docs, 200
+                return marshal(docs, doc_model), 200
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)

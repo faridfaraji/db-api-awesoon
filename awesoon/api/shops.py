@@ -6,11 +6,12 @@ from sqlalchemy import select
 from flask_restx import Namespace, Resource, marshal
 
 from awesoon.api.model.shops import shop, shop_prompt
-from awesoon.core.database.prompts import get_prompt_by_shop, upsert_prompt_shop
+from awesoon.core.database.docs import add_shop_docs, get_shop_docs
 from awesoon.core.database.shops import delete_negative_keyword, get_keywords_for_shop, get_shop_with_identifier, upsert_shop, upsert_shop_negative_keyword
 from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema import Session
-from awesoon.model.schema.shop import NegativeKeyWord, NegativeKeyWord, Shop
+from awesoon.model.schema.shop import Shop
+from flask_restx import Namespace, Resource, fields, inputs, marshal
 ns = Namespace(
     "shops", "This namespace is resposible for retrieving and storing the shops info.")
 
@@ -32,6 +33,21 @@ shop_parser = ns.parser()
 shop_parser.add_argument("name", type=str, default=None, location="json")
 shop_parser.add_argument("shop_url", type=str, default=None, location="json")
 shop_parser.add_argument("access_token", type=str, default=None, location="json")
+
+doc_parser = ns.parser()
+doc_parser.add_argument("doc", type=str, default=None, location="json")
+doc_parser.add_argument("embedding", type=list, default=None, location="json")
+doc_parser.add_argument("version", type=str, default=None, location="json")
+
+
+doc_model = ns.model(
+    "doc",
+    {
+        "doc": fields.String(),
+        "embedding": fields.List(fields.Float, required=False, default=[]),
+        "version": fields.String()
+    },
+)
 
 
 @ns.route("/")
@@ -99,26 +115,30 @@ class SingleNegativeKeyWord(Resource):
                 ns.abort(500)
 
 
-@ns.route("/<id>/prompt")
-class ShopPrompt(Resource):
+@ns.route("/<id>/docs")
+class ShopDoc(Resource):
     def get(self, id):
         with Session() as session:
             try:
-                prompt = get_prompt_by_shop(session, id)
+                docs = get_shop_docs(session, id)
                 session.commit()
-                return marshal(prompt, shop_prompt_model), 200
+                return docs, 200
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)
 
-    @ns.expect(prompt_parser)
-    def put(self, id):
+    @ns.expect(doc_model)
+    def post(self, id):
         with Session() as session:
             try:
-                data = prompt_parser.parse_args()
-                upsert_prompt_shop(session, id, data["prompt"])
+                doc_data = doc_parser.parse_args()
+                embedding = doc_data["embedding"]
+                if len(embedding) != 1536:
+                    return 400, "Wrong embedding dimension, should be length 1536"
+                add_shop_docs(session, doc_data, id)
                 session.commit()
-                return id, 200
+                return {"message": "SUCCESS"}, 200
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)
+

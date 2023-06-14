@@ -1,6 +1,8 @@
-from awesoon.model import Base
+from datetime import datetime
+from langchain.vectorstores.pgvector import Base
 from sqlalchemy import BigInteger, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
+from langchain.vectorstores.pgvector import CollectionStore
 
 
 class ShopNegativeKeyWord(Base):
@@ -25,6 +27,8 @@ class Shop(Base):
         "ShopNegativeKeyWord",
         foreign_keys=[ShopNegativeKeyWord.shop_id],
     )
-    prompt_id = Column(ForeignKey("prompts.id"))
-    prompt = relationship("Prompt", foreign_keys=[prompt_id])
-
+    collection_id = Column(ForeignKey(CollectionStore.uuid))
+    collection = relationship(
+        "CollectionStore", foreign_keys=[collection_id]
+    )
+    docs_version = Column(String, nullable=True)

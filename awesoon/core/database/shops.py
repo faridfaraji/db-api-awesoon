@@ -4,7 +4,7 @@ from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema.shop import NegativeKeyWord, Shop, ShopNegativeKeyWord
 
 
-def get_shop_with_identifier(session, shop_identifier: int):
+def get_shop_with_identifier(session, shop_identifier: int) -> Shop:
     query = select(Shop).where(Shop.shop_identifier == shop_identifier)
     shop = session.scalars(query).first()
     if shop is None:

@@ -7,9 +7,10 @@ dependencies:
         - flask_cors
         - gevent
         - gunicorn
+        - langchain
         - marshmallow
         - pip
-        - psycopg2-binary<2.10
+        - psycopg2
         - sqlalchemy<2.0.4
         - pytest
         - python=3.9
@@ -17,5 +18,6 @@ dependencies:
         - pip:
                 - config-probe
                 - pytest-cov
+                - pgvector
                 - tox-conda
 

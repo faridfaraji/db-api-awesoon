@@ -43,7 +43,7 @@ def add_shop_docs(session: Session, shop_doc: dict, shop_id: int):
     if shop.docs_version != version:
         pre_delete_collection = True
         shop.docs_version = version
-        Shop.collection_id = None
+        shop.collection_id = None
         session.commit()
     vector_store = PGVector(
         connection_string=CONNECTION_STRING_PG_VECTOR,

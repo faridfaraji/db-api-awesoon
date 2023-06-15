@@ -43,6 +43,8 @@ def add_shop_docs(session: Session, shop_doc: dict, shop_id: int):
     if shop.docs_version != version:
         pre_delete_collection = True
         shop.docs_version = version
+        Shop.collection_id = None
+        session.commit()
     vector_store = PGVector(
         connection_string=CONNECTION_STRING_PG_VECTOR,
         embedding_function=None,
@@ -52,6 +54,7 @@ def add_shop_docs(session: Session, shop_doc: dict, shop_id: int):
     )
     shop.collection_id = vector_store.get_collection(session).uuid
     session.add(shop)
+    session.commit()
     vector_store.add_embeddings([doc], [embedding], [{}], [None])
 
 

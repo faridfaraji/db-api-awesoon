@@ -1,17 +1,20 @@
 import sys
 
-from flask import request
 from flask_restx import Namespace, Resource
 from sqlalchemy import select
 from flask_restx import Namespace, Resource, marshal
 
-from awesoon.api.model.shops import shop, shop_prompt
-from awesoon.core.database.docs import add_shop_docs, get_shop_docs
+from awesoon.api.model.shops import shop
+from awesoon.api.model.docs import doc, query_doc
+
+from awesoon.core.database.docs import add_shop_docs, get_closest_shop_doc, get_shop_docs
 from awesoon.core.database.shops import delete_negative_keyword, get_keywords_for_shop, get_shop_with_identifier, upsert_shop, upsert_shop_negative_keyword
 from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema import Session
 from awesoon.model.schema.shop import Shop
-from flask_restx import Namespace, Resource, fields, inputs, marshal
+
+from flask_restx import Namespace, Resource, marshal
+
 ns = Namespace(
     "shops", "This namespace is resposible for retrieving and storing the shops info.")
 
@@ -20,10 +23,6 @@ shop_model = ns.model(
     shop
 )
 
-shop_prompt_model = ns.model(
-    "model",
-    shop_prompt
-)
 
 prompt_parser = ns.parser()
 prompt_parser.add_argument("prompt", type=str, default=None, location="json")
@@ -42,12 +41,18 @@ doc_parser.add_argument("docs_version", type=str, default=None, location="json")
 
 doc_model = ns.model(
     "doc",
-    {
-        "document": fields.String(),
-        "embedding": fields.List(fields.Float, required=False, default=[]),
-        "docs_version": fields.String()
-    },
+    doc
 )
+
+
+query_doc_model = ns.model(
+    "closest_doc",
+    query_doc
+)
+
+query_doc_parser = ns.parser()
+query_doc_parser.add_argument("query_embedding", type=list, default=None, location="json")
+query_doc_parser.add_argument("number_of_docs", type=int, default=None, location="json")
 
 
 @ns.route("/")
@@ -142,3 +147,19 @@ class ShopDoc(Resource):
                 print(e, file=sys.stderr)
                 ns.abort(500)
 
+
+@ns.route("/<id>/closest-doc")
+class ClosestShopDoc(Resource):
+    @ns.expect(query_doc_model)
+    def post(self, id):
+        with Session() as session:
+            try:
+                doc_data = query_doc_parser.parse_args()
+                embedding = doc_data["query_embedding"]
+                number_of_docs = doc_data["number_of_docs"]
+                docs = get_closest_shop_doc(session, embedding, id, number_of_docs=number_of_docs)
+                texts = [doc.page_content for doc in docs]
+                return {"documents": texts}, 200
+            except Exception as e:
+                print(e, file=sys.stderr)
+                ns.abort(500)

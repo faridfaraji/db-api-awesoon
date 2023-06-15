@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from awesoon.core.database.shops import get_shop_with_identifier
 from awesoon.model.schema import CONNECTION_STRING_PG_VECTOR
 from awesoon.model.schema.shop import Shop
-from langchain.vectorstores.pgvector import EmbeddingStore, CollectionStore, PGVector
+from langchain.vectorstores.pgvector import EmbeddingStore, CollectionStore, PGVector, DistanceStrategy
+from langchain.schema import Document
 
 
 def get_shop_docs(session: Session, shop_id: int):
@@ -48,4 +49,20 @@ def add_shop_docs(session: Session, shop_doc: dict, shop_id: int):
     )
     shop.collection_id = vector_store.get_collection(session).uuid
     session.add(shop)
-    vector_store.add_embeddings([doc], [embedding], [None], [None])
+    vector_store.add_embeddings([doc], [embedding], [{}], [None])
+
+
+def get_closest_shop_doc(
+        session: Session,
+        embedding: List[float],
+        shop_id: int,
+        number_of_docs: int = 4
+) -> List[Document]:
+    shop: Shop = get_shop_with_identifier(session, shop_id)
+    vector_store = PGVector(
+        connection_string=CONNECTION_STRING_PG_VECTOR,
+        embedding_function=None,
+        collection_name=f"{shop.name}_{shop.shop_identifier}",
+        distance_strategy=DistanceStrategy.COSINE
+    )
+    return vector_store.similarity_search_by_vector(embedding, k=number_of_docs)

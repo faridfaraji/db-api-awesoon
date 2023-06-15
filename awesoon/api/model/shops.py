@@ -7,7 +7,3 @@ shop = {
     "shop_url": fields.String(required=True),
     "access_token": fields.String(required=True)
 }
-
-shop_prompt = {
-    "prompt": fields.String(required=True)
-}

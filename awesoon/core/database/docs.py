@@ -8,7 +8,7 @@ from langchain.vectorstores.pgvector import EmbeddingStore, CollectionStore, PGV
 from langchain.schema import Document
 
 
-def get_shop_docs(session: Session, shop_id: int):
+def get_shop_docs(session: Session, shop_id: int, args: dict):
     query = select(
         EmbeddingStore.document, EmbeddingStore.embedding, Shop.docs_version
     ).join(
@@ -19,14 +19,17 @@ def get_shop_docs(session: Session, shop_id: int):
         Shop.shop_identifier == shop_id
     )
     result = session.execute(query).all()
+    show_embedding = args["show_embedding"]
     processed_result = []
     for item in result:
-        processed_result.append(
-            {
+        doc = {
                 "document": item[0],
-                "embedding": [float(value) for value in item[1]],
                 "docs_version": item[2]
-            }
+        }
+        if show_embedding:
+            doc["embedding"] = [float(value) for value in item[1]]
+        processed_result.append(
+            doc
         )
     return processed_result
 

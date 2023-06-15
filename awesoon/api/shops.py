@@ -2,7 +2,7 @@ import sys
 
 from flask_restx import Namespace, Resource
 from sqlalchemy import select
-from flask_restx import Namespace, Resource, marshal
+from flask_restx import Namespace, Resource, marshal, inputs
 
 from awesoon.api.model.shops import shop
 from awesoon.api.model.docs import doc, query_doc
@@ -12,7 +12,7 @@ from awesoon.core.database.shops import delete_negative_keyword, get_keywords_fo
 from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema import Session
 from awesoon.model.schema.shop import Shop
-
+from awesoon.api.util import add_docs_search_params
 from flask_restx import Namespace, Resource, marshal
 
 ns = Namespace(
@@ -39,6 +39,10 @@ doc_parser.add_argument("embedding", type=list, default=None, location="json")
 doc_parser.add_argument("docs_version", type=str, default=None, location="json")
 
 
+get_doc_parser = ns.parser()
+get_doc_parser = add_docs_search_params(get_doc_parser)
+
+
 doc_model = ns.model(
     "doc",
     doc
@@ -53,6 +57,7 @@ query_doc_model = ns.model(
 query_doc_parser = ns.parser()
 query_doc_parser.add_argument("query_embedding", type=list, default=None, location="json")
 query_doc_parser.add_argument("number_of_docs", type=int, default=None, location="json")
+query_doc_parser = add_docs_search_params(query_doc_parser)
 
 
 @ns.route("/")
@@ -122,10 +127,12 @@ class SingleNegativeKeyWord(Resource):
 
 @ns.route("/<id>/docs")
 class ShopDoc(Resource):
+    @ns.expect(get_doc_parser)
     def get(self, id):
         with Session() as session:
             try:
-                docs = get_shop_docs(session, id)
+                args = get_doc_parser.parse_args()
+                docs = get_shop_docs(session, id, args)
                 session.commit()
                 return marshal(docs, doc_model), 200
             except Exception as e:

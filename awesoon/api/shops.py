@@ -79,6 +79,9 @@ shopify_installation_parser = ns.parser()
 shopify_installation_parser.add_argument("name", type=str, default=None, location="json")
 shopify_installation_parser.add_argument("access_token", type=str, default=None, location="json")
 
+get_shopify_installation_parser = ns.parser()
+get_shopify_installation_parser.add_argument("name", type=str, default=None, location="values")
+
 
 @ns.route("")
 class Shops(Resource):
@@ -195,10 +198,12 @@ class ClosestShopDoc(Resource):
 
 @ns.route("/<id>/shopify-installations")
 class ShopifyInstallation(Resource):
+    @ns.expect(get_shopify_installation_parser)
     def get(self, id):
         with Session() as session:
             try:
-                shopify_app_installations = get_all_shopify_app_installations(session, id)
+                args = get_shopify_installation_parser.parse_args()
+                shopify_app_installations = get_all_shopify_app_installations(session, id, args)
                 return marshal(shopify_app_installations, shopify_installation_model)
             except Exception as e:
                 print(e, file=sys.stderr)

@@ -20,7 +20,7 @@ def get_shopify_app_with_name(session, name):
     return session.scalars(query).first()
 
 
-def get_all_shopify_app_installations(session, shop_identifier):
+def get_all_shopify_app_installations(session, shop_identifier, args):
     query = select(
         ShopifyApp.name, ShopifyAppInstallation.access_token, Shop.shop_url
     ).join(
@@ -30,4 +30,8 @@ def get_all_shopify_app_installations(session, shop_identifier):
     ).where(
         Shop.shop_identifier == shop_identifier
     )
+    if args["name"]:
+        query = query.filter(
+            ShopifyApp.name == args["name"]
+        )
     return session.execute(query).all()

@@ -2,16 +2,18 @@ import sys
 
 from flask_restx import Namespace, Resource
 from sqlalchemy import select
-from flask_restx import Namespace, Resource, marshal, inputs
+from flask_restx import Namespace, Resource, marshal, inputs, fields
+import sqlalchemy
 
 from awesoon.api.model.shops import shop
 from awesoon.api.model.docs import doc, query_doc
 
 from awesoon.core.database.docs import add_shop_docs, get_closest_shop_doc, get_shop_docs
-from awesoon.core.database.shops import delete_negative_keyword, get_keywords_for_shop, get_shop_with_identifier, upsert_shop, upsert_shop_negative_keyword
+from awesoon.core.database.shopify import get_all_shopify_app_installations, get_shopify_app_with_name
+from awesoon.core.database.shops import delete_negative_keyword, get_all_shops, get_keywords_for_shop, get_shop_with_identifier, upsert_shop, upsert_shop_negative_keyword
 from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema import Session
-from awesoon.model.schema.shop import Shop
+from awesoon.model.schema.shop import Shop, ShopifyAppInstallation
 from awesoon.api.util import add_docs_search_params
 from flask_restx import Namespace, Resource, marshal
 
@@ -32,6 +34,11 @@ shop_parser = ns.parser()
 shop_parser.add_argument("name", type=str, default=None, location="json")
 shop_parser.add_argument("shop_url", type=str, default=None, location="json")
 shop_parser.add_argument("access_token", type=str, default=None, location="json")
+
+
+get_shop_parser = ns.parser()
+get_shop_parser.add_argument("shop_url", type=str, default=None, location="values")
+
 
 doc_parser = ns.parser()
 doc_parser.add_argument("document", type=str, default=None, location="json")
@@ -59,13 +66,27 @@ query_doc_parser.add_argument("query_embedding", type=list, default=None, locati
 query_doc_parser.add_argument("number_of_docs", type=int, default=None, location="json")
 query_doc_parser = add_docs_search_params(query_doc_parser)
 
+shopify_installation_model = ns.model(
+    "shopify_installation",
+    {
+        "name": fields.String(required=True),
+        "access_token": fields.String(required=True),
+        "shop_url": fields.String(required=True)
+    }
+)
 
-@ns.route("/")
+shopify_installation_parser = ns.parser()
+shopify_installation_parser.add_argument("name", type=str, default=None, location="json")
+shopify_installation_parser.add_argument("access_token", type=str, default=None, location="json")
+
+
+@ns.route("")
 class Shops(Resource):
+    @ns.expect(get_shop_parser)
     def get(self):
+        args = get_shop_parser.parse_args()
         with Session() as session:
-            query = select(Shop)
-            shops = session.scalars(query).all()
+            shops = get_all_shops(session, args)
             marshalled_shops = marshal(shops, shop_model)
         return marshalled_shops, 200
 
@@ -167,6 +188,39 @@ class ClosestShopDoc(Resource):
                 docs = get_closest_shop_doc(session, embedding, id, number_of_docs=number_of_docs)
                 texts = [doc.page_content for doc in docs]
                 return {"documents": texts}, 200
+            except Exception as e:
+                print(e, file=sys.stderr)
+                ns.abort(500)
+
+
+@ns.route("/<id>/shopify-installations")
+class ShopifyInstallation(Resource):
+    def get(self, id):
+        with Session() as session:
+            try:
+                shopify_app_installations = get_all_shopify_app_installations(session, id)
+                return marshal(shopify_app_installations, shopify_installation_model)
+            except Exception as e:
+                print(e, file=sys.stderr)
+                ns.abort(500)
+
+    @ns.expect(shopify_installation_parser)
+    def post(self, id):
+        with Session() as session:
+            try:
+                data = shopify_installation_parser.parse_args()
+                shop = get_shop_with_identifier(session, id)
+                shopify_app = get_shopify_app_with_name(session, data["name"])
+                shopify_app_installation = ShopifyAppInstallation(
+                    access_token=data["access_token"],
+                    shop_id=shop.id,
+                    app_id=shopify_app.app_client_id
+                )
+                session.add(shopify_app_installation)
+                session.commit()
+                return {"message": "SUCCESS"}, 200
+            except sqlalchemy.exc.IntegrityError:
+                ns.abort(400, "This installation is not allowed")
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)

@@ -21,8 +21,7 @@ class Shop(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     shop_identifier = Column(BigInteger, unique=True)
-    shop_url = Column(String)
-    access_token = Column(String)
+    shop_url = Column(String, unique=True)
     negative_keywords = relationship(
         "ShopNegativeKeyWord",
         foreign_keys=[ShopNegativeKeyWord.shop_id],
@@ -32,3 +31,17 @@ class Shop(Base):
         "CollectionStore", foreign_keys=[collection_id]
     )
     docs_version = Column(String, nullable=True)
+
+
+class ShopifyApp(Base):
+    __tablename__ = "shopify_apps"
+    app_client_id = Column(String, primary_key=True)
+    app_client_secret = Column(String)
+    name = Column(String, unique=True)
+
+
+class ShopifyAppInstallation(Base):
+    __tablename__ = "shopify_app_installations"
+    access_token = Column(String)
+    app_id = Column(ForeignKey(ShopifyApp.app_client_id), primary_key=True)
+    shop_id = Column(ForeignKey(Shop.id), primary_key=True)

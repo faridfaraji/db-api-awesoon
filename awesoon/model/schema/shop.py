@@ -19,7 +19,7 @@ class NegativeKeyWord(Base):
 class Shop(Base):
     __tablename__ = "shops"
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    shop_name = Column(String)
     shop_identifier = Column(BigInteger, unique=True)
     shop_url = Column(String, unique=True)
     negative_keywords = relationship(
@@ -27,9 +27,7 @@ class Shop(Base):
         foreign_keys=[ShopNegativeKeyWord.shop_id],
     )
     collection_id = Column(ForeignKey(CollectionStore.uuid))
-    collection = relationship(
-        "CollectionStore", foreign_keys=[collection_id]
-    )
+    collection = relationship("CollectionStore", foreign_keys=[collection_id])
     docs_version = Column(String, nullable=True)
 
 
@@ -37,7 +35,7 @@ class ShopifyApp(Base):
     __tablename__ = "shopify_apps"
     app_client_id = Column(String, primary_key=True)
     app_client_secret = Column(String)
-    name = Column(String, unique=True)
+    app_name = Column(String, unique=True)
 
 
 class ShopifyAppInstallation(Base):

@@ -12,6 +12,15 @@ def get_shop_with_identifier(session, shop_identifier: int) -> Shop:
     return shop
 
 
+def get_all_shops(session, args: dict):
+    query = select(Shop)
+    if args["shop_url"]:
+        query = query.filter(
+            Shop.shop_url == args["shop_url"]
+        )
+    return session.scalars(query).all()
+
+
 def upsert_shop(session, shop_identifier: int, data: dict):
     try:
         shop = get_shop_with_identifier(session, shop_identifier)

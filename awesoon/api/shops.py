@@ -66,9 +66,10 @@ query_doc_parser = add_docs_search_params(query_doc_parser)
 shopify_installation_model = ns.model(
     "shopify_installation",
     {
+        "id": fields.String(readonly=True),
         "app_name": fields.String(required=True),
         "access_token": fields.String(required=True),
-        "shop_url": fields.String(required=True),
+        "shop_url": fields.String(readonly=True),
     },
 )
 

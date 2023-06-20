@@ -3,6 +3,7 @@ from langchain.vectorstores.pgvector import Base
 from sqlalchemy import BigInteger, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from langchain.vectorstores.pgvector import CollectionStore
+from uuid import uuid4
 
 
 class ShopNegativeKeyWord(Base):
@@ -42,6 +43,7 @@ class ShopifyApp(Base):
 
 class ShopifyAppInstallation(Base):
     __tablename__ = "shopify_app_installations"
+    guid = Column(String, default=lambda: str(uuid4()), index=True)
     access_token = Column(String)
     app_id = Column(ForeignKey(ShopifyApp.app_client_id), primary_key=True)
     shop_id = Column(ForeignKey(Shop.id), primary_key=True)

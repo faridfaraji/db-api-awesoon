@@ -7,6 +7,7 @@ from flask_cors import CORS
 
 from awesoon.api.shops import ns as shops_ns
 from awesoon.api.shopify import ns as shopify_apps_ns
+from awesoon.api.shopify_installations import ns as shopify_installations_ns
 from awesoon.api.health import ns as health_ns
 from awesoon.config import load
 
@@ -29,6 +30,7 @@ def create_app():
     api_health.add_namespace(health_ns, path='/health')
     api_v1.add_namespace(shops_ns)
     api_v1.add_namespace(shopify_apps_ns)
+    api_v1.add_namespace(shopify_installations_ns)
     app.register_blueprint(v1_blueprint)
     app.register_blueprint(health_blueprint)
 

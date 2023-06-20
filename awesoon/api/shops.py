@@ -10,20 +10,23 @@ from awesoon.api.model.docs import doc, query_doc
 
 from awesoon.core.database.docs import add_shop_docs, get_closest_shop_doc, get_shop_docs
 from awesoon.core.database.shopify import get_all_shopify_app_installations, get_shopify_app_with_name
-from awesoon.core.database.shops import delete_negative_keyword, get_all_shops, get_keywords_for_shop, get_shop_with_identifier, upsert_shop, upsert_shop_negative_keyword
+from awesoon.core.database.shops import (
+    delete_negative_keyword,
+    get_all_shops,
+    get_keywords_for_shop,
+    get_shop_with_identifier,
+    upsert_shop,
+    upsert_shop_negative_keyword,
+)
 from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema import Session
 from awesoon.model.schema.shop import Shop, ShopifyAppInstallation
 from awesoon.api.util import add_docs_search_params
 from flask_restx import Namespace, Resource, marshal
 
-ns = Namespace(
-    "shops", "This namespace is resposible for retrieving and storing the shops info.")
+ns = Namespace("shops", "This namespace is resposible for retrieving and storing the shops info.")
 
-shop_model = ns.model(
-    "model",
-    shop
-)
+shop_model = ns.model("model", shop)
 
 
 prompt_parser = ns.parser()
@@ -31,7 +34,7 @@ prompt_parser.add_argument("prompt", type=str, default=None, location="json")
 
 
 shop_parser = ns.parser()
-shop_parser.add_argument("name", type=str, default=None, location="json")
+shop_parser.add_argument("shop_name", type=str, default=None, location="json")
 shop_parser.add_argument("shop_url", type=str, default=None, location="json")
 shop_parser.add_argument("access_token", type=str, default=None, location="json")
 
@@ -50,16 +53,10 @@ get_doc_parser = ns.parser()
 get_doc_parser = add_docs_search_params(get_doc_parser)
 
 
-doc_model = ns.model(
-    "doc",
-    doc
-)
+doc_model = ns.model("doc", doc)
 
 
-query_doc_model = ns.model(
-    "closest_doc",
-    query_doc
-)
+query_doc_model = ns.model("closest_doc", query_doc)
 
 query_doc_parser = ns.parser()
 query_doc_parser.add_argument("query_embedding", type=list, default=None, location="json")
@@ -69,18 +66,18 @@ query_doc_parser = add_docs_search_params(query_doc_parser)
 shopify_installation_model = ns.model(
     "shopify_installation",
     {
-        "name": fields.String(required=True),
+        "app_name": fields.String(required=True),
         "access_token": fields.String(required=True),
-        "shop_url": fields.String(required=True)
-    }
+        "shop_url": fields.String(required=True),
+    },
 )
 
 shopify_installation_parser = ns.parser()
-shopify_installation_parser.add_argument("name", type=str, default=None, location="json")
+shopify_installation_parser.add_argument("app_name", type=str, default=None, location="json")
 shopify_installation_parser.add_argument("access_token", type=str, default=None, location="json")
 
 get_shopify_installation_parser = ns.parser()
-get_shopify_installation_parser.add_argument("name", type=str, default=None, location="values")
+get_shopify_installation_parser.add_argument("app_name", type=str, default=None, location="values")
 
 
 @ns.route("")
@@ -215,11 +212,9 @@ class ShopifyInstallation(Resource):
             try:
                 data = shopify_installation_parser.parse_args()
                 shop = get_shop_with_identifier(session, id)
-                shopify_app = get_shopify_app_with_name(session, data["name"])
+                shopify_app = get_shopify_app_with_name(session, data["app_name"])
                 shopify_app_installation = ShopifyAppInstallation(
-                    access_token=data["access_token"],
-                    shop_id=shop.id,
-                    app_id=shopify_app.app_client_id
+                    access_token=data["access_token"], shop_id=shop.id, app_id=shopify_app.app_client_id
                 )
                 session.add(shopify_app_installation)
                 session.commit()

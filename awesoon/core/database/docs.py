@@ -9,28 +9,20 @@ from langchain.schema import Document
 
 
 def get_shop_docs(session: Session, shop_id: int, args: dict):
-    query = select(
-        EmbeddingStore.document, EmbeddingStore.embedding, Shop.docs_version
-    ).join(
-        CollectionStore, EmbeddingStore.collection_id == CollectionStore.uuid
-    ).join(
-        Shop, Shop.collection_id == CollectionStore.uuid
-    ).where(
-        Shop.shop_identifier == shop_id
+    query = (
+        select(EmbeddingStore.document, EmbeddingStore.embedding, Shop.docs_version)
+        .join(CollectionStore, EmbeddingStore.collection_id == CollectionStore.uuid)
+        .join(Shop, Shop.collection_id == CollectionStore.uuid)
+        .where(Shop.shop_identifier == shop_id)
     )
     result = session.execute(query).all()
     show_embedding = args["show_embedding"]
     processed_result = []
     for item in result:
-        doc = {
-                "document": item[0],
-                "docs_version": item[2]
-        }
+        doc = {"document": item[0], "docs_version": item[2]}
         if show_embedding:
             doc["embedding"] = [float(value) for value in item[1]]
-        processed_result.append(
-            doc
-        )
+        processed_result.append(doc)
     return processed_result
 
 
@@ -48,9 +40,9 @@ def add_shop_docs(session: Session, shop_doc: dict, shop_id: int):
     vector_store = PGVector(
         connection_string=CONNECTION_STRING_PG_VECTOR,
         embedding_function=None,
-        collection_name=f"{shop.name}_{shop.shop_identifier}",
+        collection_name=f"{shop.shop_name}_{shop.shop_identifier}",
         distance_strategy=None,
-        pre_delete_collection=pre_delete_collection
+        pre_delete_collection=pre_delete_collection,
     )
     shop.collection_id = vector_store.get_collection(session).uuid
     session.add(shop)
@@ -59,16 +51,13 @@ def add_shop_docs(session: Session, shop_doc: dict, shop_id: int):
 
 
 def get_closest_shop_doc(
-        session: Session,
-        embedding: List[float],
-        shop_id: int,
-        number_of_docs: int = 4
+    session: Session, embedding: List[float], shop_id: int, number_of_docs: int = 4
 ) -> List[Document]:
     shop: Shop = get_shop_with_identifier(session, shop_id)
     vector_store = PGVector(
         connection_string=CONNECTION_STRING_PG_VECTOR,
         embedding_function=None,
-        collection_name=f"{shop.name}_{shop.shop_identifier}",
-        distance_strategy=DistanceStrategy.COSINE
+        collection_name=f"{shop.shop_name}_{shop.shop_identifier}",
+        distance_strategy=DistanceStrategy.COSINE,
     )
     return vector_store.similarity_search_by_vector(embedding, k=number_of_docs)

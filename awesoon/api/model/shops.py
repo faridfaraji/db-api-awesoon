@@ -5,6 +5,7 @@ shop = {
     "shop_name": fields.String(required=True),
     "shop_identifier": fields.Integer(required=True),
     "shop_url": fields.String(required=True),
+    "contact_email": fields.String(required=True)
 }
 
 

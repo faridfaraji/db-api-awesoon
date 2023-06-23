@@ -21,6 +21,7 @@ class Shop(Base):
     __tablename__ = "shops"
     id = Column(Integer, primary_key=True)
     shop_name = Column(String)
+    contact_email = Column(String)
     shop_identifier = Column(BigInteger, unique=True)
     shop_url = Column(String, unique=True)
     negative_keywords = relationship(

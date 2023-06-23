@@ -36,7 +36,7 @@ prompt_parser.add_argument("prompt", type=str, default=None, location="json")
 shop_parser = ns.parser()
 shop_parser.add_argument("shop_name", type=str, default=None, location="json")
 shop_parser.add_argument("shop_url", type=str, default=None, location="json")
-shop_parser.add_argument("access_token", type=str, default=None, location="json")
+shop_parser.add_argument("contact_email", type=str, default=None, location="json")
 
 
 get_shop_parser = ns.parser()

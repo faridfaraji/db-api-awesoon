@@ -1,3 +1,4 @@
+import enum
 from uuid import uuid4
 from langchain.vectorstores.pgvector import Base
 from sqlalchemy import Column, ForeignKey, Integer, String, Enum
@@ -19,3 +20,12 @@ class Doc(Base):
     hash = Column(String)
     embedding: Vector = Column(Vector(ADA_TOKEN_COUNT))
     document = Column(String, nullable=True)
+
+
+class DistanceStrategy(str, enum.Enum):
+    EUCLIDEAN = Doc.embedding.l2_distance
+    COSINE = Doc.embedding.cosine_distance
+    MAX_INNER_PRODUCT = Doc.embedding.max_inner_product
+
+
+DEFAULT_DISTANCE_STRATEGY = DistanceStrategy.COSINE

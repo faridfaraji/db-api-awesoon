@@ -6,6 +6,7 @@ from awesoon.api.model.docs import doc, docs_parser
 from awesoon.core.database.docs import delete_doc, get_doc_by_id, update_doc
 from awesoon.core.exceptions import DocNotFoundError
 from awesoon.model.schema import Session
+from awesoon.model.schema.doc import ADA_TOKEN_COUNT
 
 ns = Namespace("docs", "This namespace is resposible for updating and deleting docs")
 
@@ -38,8 +39,8 @@ class SingleDoc(Resource):
             try:
                 doc_data = doc_parser.parse_args()
                 embedding = doc_data["embedding"]
-                if len(embedding) != 2:
-                    return 400, "Wrong embedding dimension, should be length 1536"
+                if len(embedding) != ADA_TOKEN_COUNT:
+                    ns.abort(400, f"Wrong embedding dimension, should be length {ADA_TOKEN_COUNT}")
                 update_doc(session, doc_data, doc_id)
                 session.commit()
                 return {"message": "SUCCESS"}, 200

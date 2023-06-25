@@ -8,7 +8,7 @@ import sqlalchemy
 from awesoon.api.model.shops import shop
 from awesoon.api.model.docs import doc, query_doc
 
-from awesoon.core.database.docs import add_shop_docs, get_closest_shop_doc, get_shop_docs
+from awesoon.core.database.docs import get_closest_shop_doc, get_shop_docs
 from awesoon.core.database.shopify import get_all_shopify_app_installations, get_shopify_app_with_name
 from awesoon.core.database.shops import (
     delete_negative_keyword,
@@ -160,34 +160,18 @@ class ShopDoc(Resource):
                 print(e, file=sys.stderr)
                 ns.abort(500)
 
-    @ns.expect(doc_model)
-    def post(self, id):
-        with Session() as session:
-            try:
-                doc_data = doc_parser.parse_args()
-                embedding = doc_data["embedding"]
-                if len(embedding) != 1536:
-                    return 400, "Wrong embedding dimension, should be length 1536"
-                add_shop_docs(session, doc_data, id)
-                session.commit()
-                return {"message": "SUCCESS"}, 200
-            except Exception as e:
-                print(e, file=sys.stderr)
-                ns.abort(500)
-
 
 @ns.route("/<id>/closest-doc")
 class ClosestShopDoc(Resource):
     @ns.expect(query_doc_model)
-    def post(self, id):
+    def get(self, id):
         with Session() as session:
             try:
                 doc_data = query_doc_parser.parse_args()
                 embedding = doc_data["query_embedding"]
                 number_of_docs = doc_data["number_of_docs"]
                 docs = get_closest_shop_doc(session, embedding, id, number_of_docs=number_of_docs)
-                texts = [doc.page_content for doc in docs]
-                return {"documents": texts}, 200
+                return marshal(docs, doc_model)
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)

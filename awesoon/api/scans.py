@@ -11,6 +11,7 @@ from awesoon.api.model.scans import scan, scan_status
 
 from awesoon.api.util import add_docs_search_params
 from awesoon.api.model.docs import doc, docs_parser
+from awesoon.model.schema.doc import ADA_TOKEN_COUNT
 
 ns = Namespace("scans", "This namespace is resposible for adding and retrieving shop scans")
 
@@ -131,8 +132,8 @@ class ScanDoc(Resource):
             try:
                 doc_data = doc_parser.parse_args()
                 embedding = doc_data["embedding"]
-                if len(embedding) != 2:
-                    return 400, "Wrong embedding dimension, should be length 1536"
+                if len(embedding) != ADA_TOKEN_COUNT:
+                    ns.abort(400, f"Wrong embedding dimension, should be length {ADA_TOKEN_COUNT}")
                 add_scan_doc(session, doc_data, scan_id)
                 session.commit()
                 return {"message": "SUCCESS"}, 200
@@ -140,31 +141,3 @@ class ScanDoc(Resource):
                 print(e, file=sys.stderr)
                 ns.abort(500)
 
-
-# @ns.route("/<scan_id>/docs")
-# class ScanDoc(Resource):
-#     @ns.expect(get_doc_parser)
-#     def get(self, scan_id):
-#         with Session() as session:
-#             try:
-#                 docs = get_scan_doc_scan(session, scan_id)
-#                 session.commit()
-#                 return marshal(docs, doc_model), 200
-#             except Exception as e:
-#                 print(e, file=sys.stderr)
-#                 ns.abort(500)
-
-#     @ns.expect(doc_model)
-#     def put(self, scan_id):
-#         with Session() as session:
-#             try:
-#                 doc_data = doc_parser.parse_args()
-#                 embedding = doc_data["embedding"]
-#                 if len(embedding) != 2:
-#                     return 400, "Wrong embedding dimension, should be length 1536"
-#                 update_scan_doc(session, doc_data, scan_id)
-#                 session.commit()
-#                 return {"message": "SUCCESS"}, 200
-#             except Exception as e:
-#                 print(e, file=sys.stderr)
-#                 ns.abort(500)

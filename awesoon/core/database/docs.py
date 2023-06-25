@@ -1,8 +1,9 @@
 from typing import List
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 from awesoon.core.database.scans import get_scan_object_by_scan_id
 from awesoon.core.database.shops import get_shop_with_identifier
+from awesoon.core.exceptions import DocNotFoundError
 from awesoon.model.schema import CONNECTION_STRING_PG_VECTOR
 from awesoon.model.schema.doc import Doc
 from awesoon.model.schema.scan import Scan, ScanDoc
@@ -89,6 +90,8 @@ def get_scan_docs(session: Session, scan_id: str):
 def update_doc(session: Session, doc: dict, doc_id: str):
     query = select(ScanDoc).where(ScanDoc.guid == doc_id)
     scan_doc = session.scalars(query).first()
+    if scan_doc is None:
+        raise DocNotFoundError()
     doc = Doc(**doc)
     session.add(doc)
     session.flush()
@@ -115,5 +118,16 @@ def get_doc_by_id(session: Session, doc_id: str):
         .join(ScanDoc, ScanDoc.doc_id == Doc.id)
         .where(ScanDoc.guid == doc_id)
     )
-    return session.execute(query).first()
+    doc = session.execute(query).first()
+    if doc is None:
+        raise DocNotFoundError()
+    return doc
 
+
+def delete_doc(session: Session, doc_id: str):
+    query = delete(
+        ScanDoc
+    ).where(
+        ScanDoc.guid == doc_id
+    )
+    session.execute(query)

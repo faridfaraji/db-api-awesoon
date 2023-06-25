@@ -3,7 +3,8 @@ import sys
 from flask_restx import Namespace, Resource, marshal
 from awesoon.api.util import add_docs_search_params
 from awesoon.api.model.docs import doc, docs_parser
-from awesoon.core.database.docs import get_doc_by_id
+from awesoon.core.database.docs import delete_doc, get_doc_by_id, update_doc
+from awesoon.core.exceptions import DocNotFoundError
 from awesoon.model.schema import Session
 
 ns = Namespace("docs", "This namespace is resposible for updating and deleting docs")
@@ -25,6 +26,8 @@ class SingleDoc(Resource):
             try:
                 doc = get_doc_by_id(session, doc_id)
                 return marshal(doc, doc_model), 200
+            except DocNotFoundError:
+                ns.abort(400, "doc not found")
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)
@@ -37,22 +40,19 @@ class SingleDoc(Resource):
                 embedding = doc_data["embedding"]
                 if len(embedding) != 2:
                     return 400, "Wrong embedding dimension, should be length 1536"
-                update_doc(session, doc_data)
+                update_doc(session, doc_data, doc_id)
                 session.commit()
                 return {"message": "SUCCESS"}, 200
+            except DocNotFoundError:
+                ns.abort(400, "doc not found")
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)
 
-    @ns.expect(doc_model)
     def delete(self, doc_id):
         with Session() as session:
             try:
-                doc_data = doc_parser.parse_args()
-                embedding = doc_data["embedding"]
-                if len(embedding) != 2:
-                    return 400, "Wrong embedding dimension, should be length 1536"
-                delete_doc(session, doc_data)
+                delete_doc(session, doc_id)
                 session.commit()
                 return {"message": "SUCCESS"}, 200
             except Exception as e:

@@ -5,3 +5,7 @@ class ShopNotFoundError(Exception):
 
 class ScanNotFoundError(Exception):
     pass
+
+
+class DocNotFoundError(Exception):
+    pass

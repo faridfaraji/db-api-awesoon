@@ -4,8 +4,6 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Enum
 from awesoon.model.schema.scan_enums import ScanStatus, TriggerType
 from langchain.vectorstores.pgvector import CollectionStore
 
-from sqlalchemy.orm import relationship
-
 
 class Scan(Base):
     __tablename__ = "scans"
@@ -17,5 +15,10 @@ class Scan(Base):
         *[trigger.value for trigger in TriggerType],
         name="trigger_type", create_type=False, validate_strings=True), index=True)
     shop_id = Column(ForeignKey("shops.id"))
-    collection_id = Column(ForeignKey(CollectionStore.uuid), nullable=True)
-    collection = relationship("CollectionStore", foreign_keys=[collection_id])
+
+
+class ScanDoc(Base):
+    __tablename__ = "scan_documents"
+    guid = Column(String, default=lambda: str(uuid4()), index=True)
+    scan_id = Column(String, ForeignKey('scans.guid'), primary_key=True)
+    doc_id = Column(Integer, ForeignKey('documents.id'), primary_key=True)

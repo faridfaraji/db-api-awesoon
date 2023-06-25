@@ -2,7 +2,7 @@ import sys
 
 from flask_restx import Namespace, Resource
 from sqlalchemy import select
-from flask_restx import Namespace, Resource, marshal, inputs
+from flask_restx import Namespace, Resource, marshal
 
 from awesoon.api.model.shops import shopify_app
 from awesoon.api.model.docs import doc, query_doc

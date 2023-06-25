@@ -1,12 +1,13 @@
 from typing import List
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
-from awesoon.api import scans
 from awesoon.core.database.shops import get_shop_with_identifier
 from awesoon.core.exceptions import ScanNotFoundError
+from awesoon.model.schema.doc import Doc
 
-from awesoon.model.schema.scan import Scan
+from awesoon.model.schema.scan import Scan, ScanDoc
 from awesoon.model.schema.shop import Shop
+
 
 SCAN_COLUMNS = [c.label("id") if c.name == "guid"
                 else c for c in Scan.__table__.c if c.name != "shop_id"]
@@ -92,6 +93,19 @@ def update_scan(session: Session, scan_id: str,  scan_data: dict):
     session.add(scan)
 
 
+def init_scan_with_docs(session: Session, shop_id: int, scan: Scan):
+    query = (
+        select(Doc)
+        .join(ScanDoc, ScanDoc.doc_id == Doc.id)
+        .join(Scan, Scan.guid == ScanDoc.scan_id)
+        .join(Shop, Shop.latest_scan_id == Scan.guid)
+        .where(Shop.shop_identifier == shop_id)
+    )
+    docs = session.scalars(query).all()
+    for doc in docs:
+        session.add(ScanDoc(scan_id=scan.guid, doc_id=doc.id))
+
+
 def add_scan(session: Session, scan_data: dict):
     """adds a scan
 
@@ -103,6 +117,10 @@ def add_scan(session: Session, scan_data: dict):
     shop = get_shop_with_identifier(session, shop_identifier)
     scan = Scan(**scan_data, shop_id=shop.id)
     session.add(scan)
+    session.flush()
+    init_scan_with_docs(session, shop_identifier, scan)
+    shop.latest_scan_id = scan.guid
+    session.add(shop)
     return scan
 
 

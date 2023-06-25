@@ -11,5 +11,5 @@ scan = {
 }
 
 scan_status = {
-    "status": fields.String(required=True),
+    "status": fields.String(enum=[enum.value for enum in ScanStatus], required=True),
 }

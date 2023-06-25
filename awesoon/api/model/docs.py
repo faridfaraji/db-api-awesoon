@@ -4,7 +4,7 @@ from flask_restx import fields
 doc = {
     "document": fields.String(),
     "embedding": fields.List(fields.Float, required=False, default=[]),
-    "docs_version": fields.String()
+    "scan_id": fields.String()
 }
 
 

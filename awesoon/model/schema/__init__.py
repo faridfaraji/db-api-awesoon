@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from langchain.vectorstores.pgvector import PGVector
 from langchain.vectorstores.pgvector import Base
-from awesoon.model.schema import shop
+from awesoon.model.schema import shop, scan
 
 
 username = os.environ["DB_USERNAME"]

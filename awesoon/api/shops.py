@@ -46,7 +46,7 @@ get_shop_parser.add_argument("shop_url", type=str, default=None, location="value
 doc_parser = ns.parser()
 doc_parser.add_argument("document", type=str, default=None, location="json")
 doc_parser.add_argument("embedding", type=list, default=None, location="json")
-doc_parser.add_argument("docs_version", type=str, default=None, location="json")
+doc_parser.add_argument("scan_id", type=str, default=None, location="json")
 
 
 get_doc_parser = ns.parser()

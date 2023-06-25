@@ -5,6 +5,8 @@ from sqlalchemy.orm import relationship
 from langchain.vectorstores.pgvector import CollectionStore
 from uuid import uuid4
 
+from awesoon.model.schema.scan import Scan
+
 
 class ShopNegativeKeyWord(Base):
     __tablename__ = "shop_nk_associations"
@@ -28,9 +30,7 @@ class Shop(Base):
         "ShopNegativeKeyWord",
         foreign_keys=[ShopNegativeKeyWord.shop_id],
     )
-    collection_id = Column(ForeignKey(CollectionStore.uuid))
-    collection = relationship("CollectionStore", foreign_keys=[collection_id])
-    docs_version = Column(String, nullable=True)
+    latest_scan_id = Column(ForeignKey(Scan.guid))
 
 
 class ShopifyApp(Base):

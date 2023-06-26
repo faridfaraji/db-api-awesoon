@@ -17,8 +17,8 @@ shopify_app = {
 shopify_installation = {
     "id": fields.String(readonly=True),
     "app_name": fields.String(required=True),
-    "app_client_id": fields.String(required=True),
-    "app_client_secret": fields.String(required=True),
+    "access_token": fields.String(required=True),
+    "shop_url": fields.String(required=True),
 }
 
 

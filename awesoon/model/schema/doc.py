@@ -1,9 +1,8 @@
 import enum
 from uuid import uuid4
-from langchain.vectorstores.pgvector import Base
-from sqlalchemy import Column, ForeignKey, Integer, String, Enum
+from awesoon.model.schema import Base
+from sqlalchemy import Column, Integer, String, Enum
 from awesoon.model.schema.doc_enums import DocType
-from langchain.vectorstores.pgvector import CollectionStore
 
 from pgvector.sqlalchemy import Vector
 

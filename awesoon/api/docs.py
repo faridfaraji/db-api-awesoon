@@ -2,7 +2,8 @@
 import sys
 from flask_restx import Namespace, Resource, marshal
 from awesoon.api.util import add_docs_search_params
-from awesoon.api.model.docs import doc, docs_parser
+from awesoon.api.model.docs import doc, add_docs_parser
+from awesoon.constants import SUCCESS_MESSAGE
 from awesoon.core.database.docs import delete_doc, get_doc_by_id, update_doc
 from awesoon.core.exceptions import DocNotFoundError
 from awesoon.model.schema import Session
@@ -14,7 +15,7 @@ get_doc_parser = ns.parser()
 get_doc_parser = add_docs_search_params(get_doc_parser)
 
 doc_parser = ns.parser()
-docs_parser(doc_parser)
+add_docs_parser(doc_parser)
 
 doc_model = ns.model("doc", doc)
 
@@ -43,7 +44,7 @@ class SingleDoc(Resource):
                     ns.abort(400, f"Wrong embedding dimension, should be length {ADA_TOKEN_COUNT}")
                 update_doc(session, doc_data, doc_id)
                 session.commit()
-                return {"message": "SUCCESS"}, 200
+                return SUCCESS_MESSAGE, 200
             except DocNotFoundError:
                 ns.abort(400, "doc not found")
             except Exception as e:
@@ -55,7 +56,7 @@ class SingleDoc(Resource):
             try:
                 delete_doc(session, doc_id)
                 session.commit()
-                return {"message": "SUCCESS"}, 200
+                return SUCCESS_MESSAGE, 200
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)

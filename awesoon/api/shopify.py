@@ -1,17 +1,12 @@
 import sys
-
-from flask_restx import Namespace, Resource
-from sqlalchemy import select
 from flask_restx import Namespace, Resource, marshal
 
 from awesoon.api.model.shops import shopify_app
-from awesoon.api.model.docs import doc, query_doc
+from awesoon.constants import SUCCESS_MESSAGE
 from awesoon.core.database.shopify import get_shopify_apps
 from awesoon.model.schema.shop import ShopifyApp as ShopifyAppSchema
 
 from awesoon.model.schema import Session
-from awesoon.api.util import add_docs_search_params
-from flask_restx import Namespace, Resource, marshal
 
 ns = Namespace("shopify-apps", "This namespace is resposible for adding and retrieving shopify apps")
 
@@ -46,7 +41,7 @@ class ShopifyApp(Resource):
                 shopify_app = ShopifyAppSchema(**shopify_app_data)
                 session.add(shopify_app)
                 session.commit()
-                return {"message": "SUCCESS"}, 200
+                return SUCCESS_MESSAGE, 200
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)

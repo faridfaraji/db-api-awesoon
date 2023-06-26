@@ -1,8 +1,7 @@
 from uuid import uuid4
-from langchain.vectorstores.pgvector import Base
+from awesoon.model.schema import Base
 from sqlalchemy import Column, ForeignKey, Integer, String, Enum
 from awesoon.model.schema.scan_enums import ScanStatus, TriggerType
-from langchain.vectorstores.pgvector import CollectionStore
 
 
 class Scan(Base):

@@ -4,7 +4,7 @@ from flask_restx import Namespace, Resource
 
 from awesoon.core.database.shopify import delete_shop_shopify_installation
 from awesoon.model.schema import Session
-from flask_restx import Namespace, Resource, marshal
+from flask_restx import Namespace, Resource
 
 ns = Namespace(
     "shopify-installations", "This namespace is resposible for adding and retrieving shopify installations")

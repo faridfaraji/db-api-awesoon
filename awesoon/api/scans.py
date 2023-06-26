@@ -10,13 +10,17 @@ from awesoon.model.schema import Session
 from awesoon.api.model.scans import scan, scan_status
 
 from awesoon.api.util import add_docs_search_params
-from awesoon.api.model.docs import doc, docs_parser
+from awesoon.api.model.docs import doc, add_docs_parser
 from awesoon.model.schema.doc import ADA_TOKEN_COUNT
 
 ns = Namespace("scans", "This namespace is resposible for adding and retrieving shop scans")
 
-
+############
 scan_model = ns.model("scan", scan)
+scan_status_model = ns.model("scan_status", scan_status)
+doc_model = ns.model("doc", doc)
+############
+
 
 scan_status_parser = ns.parser()
 scan_status_parser.add_argument("status", type=str, default=None, location="json")
@@ -25,17 +29,12 @@ scan_parser = copy(scan_status_parser)
 scan_parser.add_argument("trigger_type", type=str, default=None, location="json")
 scan_parser.add_argument("shop_id", type=int, default=None, location="json")
 
-
-scan_status_model = ns.model("scan_status", scan_status)
-
-
 get_doc_parser = ns.parser()
 get_doc_parser = add_docs_search_params(get_doc_parser)
 
 doc_parser = ns.parser()
-docs_parser(doc_parser)
+add_docs_parser(doc_parser)
 
-doc_model = ns.model("doc", doc)
 
 
 @ns.route("/<scan_id>")
@@ -136,7 +135,7 @@ class ScanDoc(Resource):
                     ns.abort(400, f"Wrong embedding dimension, should be length {ADA_TOKEN_COUNT}")
                 add_scan_doc(session, doc_data, scan_id)
                 session.commit()
-                return {"message": "SUCCESS"}, 200
+                return SUCCESS_MESSAGE, 200
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)

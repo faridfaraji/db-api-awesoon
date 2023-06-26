@@ -16,7 +16,14 @@ shopify_app = {
 }
 
 shopify_installation = {
+    "id": fields.String(readonly=True),
     "app_name": fields.String(required=True),
     "app_client_id": fields.String(required=True),
     "app_client_secret": fields.String(required=True),
 }
+
+
+def add_shop_parser(parser):
+    parser.add_argument("shop_name", type=str, default=None, location="json")
+    parser.add_argument("shop_url", type=str, default=None, location="json")
+    parser.add_argument("contact_email", type=str, default=None, location="json")

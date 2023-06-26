@@ -1,8 +1,6 @@
-from datetime import datetime
-from langchain.vectorstores.pgvector import Base
+from awesoon.model.schema import Base
 from sqlalchemy import BigInteger, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from langchain.vectorstores.pgvector import CollectionStore
 from uuid import uuid4
 
 from awesoon.model.schema.scan import Scan

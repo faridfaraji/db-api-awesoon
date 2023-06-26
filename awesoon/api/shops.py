@@ -1,12 +1,11 @@
 import sys
 
-from flask_restx import Namespace, Resource
-from sqlalchemy import select
-from flask_restx import Namespace, Resource, marshal, inputs, fields
+from flask_restx import Namespace, Resource, marshal, fields
 import sqlalchemy
 
-from awesoon.api.model.shops import shop
+from awesoon.api.model.shops import add_shop_parser, shop, shopify_installation
 from awesoon.api.model.docs import doc, query_doc
+from awesoon.constants import SUCCESS_MESSAGE
 
 from awesoon.core.database.docs import get_closest_shop_doc, get_shop_docs
 from awesoon.core.database.shopify import get_all_shopify_app_installations, get_shopify_app_with_name
@@ -20,58 +19,35 @@ from awesoon.core.database.shops import (
 )
 from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema import Session
-from awesoon.model.schema.shop import Shop, ShopifyAppInstallation
+from awesoon.model.schema.shop import ShopifyAppInstallation
 from awesoon.api.util import add_docs_search_params
 from flask_restx import Namespace, Resource, marshal
 
 ns = Namespace("shops", "This namespace is resposible for retrieving and storing the shops info.")
 
+#########
 shop_model = ns.model("model", shop)
-
-
-prompt_parser = ns.parser()
-prompt_parser.add_argument("prompt", type=str, default=None, location="json")
-
+doc_model = ns.model("doc", doc)
+query_doc_model = ns.model("closest_doc", query_doc)
+shopify_installation_model = ns.model("shopify_installation", shopify_installation)
+#########
 
 shop_parser = ns.parser()
-shop_parser.add_argument("shop_name", type=str, default=None, location="json")
-shop_parser.add_argument("shop_url", type=str, default=None, location="json")
-shop_parser.add_argument("contact_email", type=str, default=None, location="json")
+add_shop_parser(shop_parser)
 
 
 get_shop_parser = ns.parser()
 get_shop_parser.add_argument("shop_url", type=str, default=None, location="values")
 
 
-doc_parser = ns.parser()
-doc_parser.add_argument("document", type=str, default=None, location="json")
-doc_parser.add_argument("embedding", type=list, default=None, location="json")
-doc_parser.add_argument("scan_id", type=str, default=None, location="json")
-
-
 get_doc_parser = ns.parser()
 get_doc_parser = add_docs_search_params(get_doc_parser)
 
-
-doc_model = ns.model("doc", doc)
-
-
-query_doc_model = ns.model("closest_doc", query_doc)
 
 query_doc_parser = ns.parser()
 query_doc_parser.add_argument("query_embedding", type=list, default=None, location="json")
 query_doc_parser.add_argument("number_of_docs", type=int, default=None, location="json")
 query_doc_parser = add_docs_search_params(query_doc_parser)
-
-shopify_installation_model = ns.model(
-    "shopify_installation",
-    {
-        "id": fields.String(readonly=True),
-        "app_name": fields.String(required=True),
-        "access_token": fields.String(required=True),
-        "shop_url": fields.String(readonly=True),
-    },
-)
 
 shopify_installation_parser = ns.parser()
 shopify_installation_parser.add_argument("app_name", type=str, default=None, location="json")
@@ -131,7 +107,7 @@ class SingleNegativeKeyWord(Resource):
             try:
                 upsert_shop_negative_keyword(session, word, int(id))
                 session.commit()
-                return {"message": "SUCCESS"}, 200
+                return SUCCESS_MESSAGE, 200
             except Exception as e:
                 print(e, file=sys.stderr)
                 ns.abort(500)
@@ -202,7 +178,7 @@ class ShopifyInstallation(Resource):
                 )
                 session.add(shopify_app_installation)
                 session.commit()
-                return {"message": "SUCCESS"}, 200
+                return SUCCESS_MESSAGE, 200
             except sqlalchemy.exc.IntegrityError:
                 ns.abort(400, "This installation is not allowed")
             except Exception as e:

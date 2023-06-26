@@ -3,14 +3,10 @@ from sqlalchemy import delete, select
 import sqlalchemy
 from sqlalchemy.orm import Session
 from awesoon.core.database.scans import get_scan_object_by_scan_id
-from awesoon.core.database.shops import get_shop_with_identifier
 from awesoon.core.exceptions import DocNotFoundError
-from awesoon.model.schema import CONNECTION_STRING_PG_VECTOR
 from awesoon.model.schema.doc import DEFAULT_DISTANCE_STRATEGY, Doc
 from awesoon.model.schema.scan import Scan, ScanDoc
 from awesoon.model.schema.shop import Shop
-from langchain.vectorstores.pgvector import EmbeddingStore, CollectionStore, PGVector, DistanceStrategy
-from langchain.schema import Document
 
 
 DOC_COLUMNS = [c.label("id") if c.name == "guid"
@@ -19,7 +15,7 @@ DOC_COLUMNS = [c.label("id") if c.name == "guid"
 
 def get_closest_shop_doc(
     session: Session, embedding: List[float], shop_id: int, number_of_docs: int = 4
-) -> List[Document]:
+):
 
     query = select(
         *DOC_COLUMNS, ScanDoc.guid.label("id"),

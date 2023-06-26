@@ -19,7 +19,7 @@ query_doc = {
 }
 
 
-def docs_parser(parser):
+def add_docs_parser(parser):
     parser.add_argument("document", type=str, default=None, location="json")
     parser.add_argument("embedding", type=list, default=None, location="json")
     parser.add_argument("hash", type=str, default=None, location="json")

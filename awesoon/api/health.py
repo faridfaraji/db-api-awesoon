@@ -11,9 +11,9 @@ STATUS_UP = "UP"
 
 logger = logging.getLogger(__name__)
 
-ns = Namespace("health", "Health check related endpoints")
+api = Namespace("health", "Health check related endpoints")
 
-simple_status_report = ns.model(
+simple_status_report = api.model(
     "simple_status_report",
     {
         "status": fields.String(
@@ -23,10 +23,10 @@ simple_status_report = ns.model(
 )
 
 
-@ns.route("")
+@api.route("")
 class HealthCheck(Resource):
-    @ns.marshal_with(simple_status_report)
-    @ns.doc(
+    @api.marshal_with(simple_status_report)
+    @api.doc(
         responses={
             200: "Up and running",
             500: "Health check failed",

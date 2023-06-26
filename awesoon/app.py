@@ -2,13 +2,15 @@ import logging
 import os
 
 from flask import Blueprint, Flask
-from flask_restx import Api
 from flask_cors import CORS
+from flask_restx import Api
 
-from awesoon.api.shops import ns as shops_ns
-from awesoon.api.shopify import ns as shopify_apps_ns
-from awesoon.api.shopify_installations import ns as shopify_installations_ns
-from awesoon.api.health import ns as health_ns
+from awesoon.api.docs import api as docs_ns
+from awesoon.api.health import api as health_ns
+from awesoon.api.scans import api as scans_ns
+from awesoon.api.shopify import api as shopify_apps_ns
+from awesoon.api.shopify_installations import api as shopify_installations_ns
+from awesoon.api.shops import api as shops_ns
 from awesoon.config import load
 
 config = load(os.environ.get('ENVIRONMENT', 'local'))
@@ -29,7 +31,9 @@ def create_app():
 
     api_health.add_namespace(health_ns, path='/health')
     api_v1.add_namespace(shops_ns)
+    api_v1.add_namespace(scans_ns)
     api_v1.add_namespace(shopify_apps_ns)
+    api_v1.add_namespace(docs_ns)
     api_v1.add_namespace(shopify_installations_ns)
     app.register_blueprint(v1_blueprint)
     app.register_blueprint(health_blueprint)

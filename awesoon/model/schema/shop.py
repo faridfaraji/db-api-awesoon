@@ -1,9 +1,10 @@
-from datetime import datetime
-from langchain.vectorstores.pgvector import Base
-from sqlalchemy import BigInteger, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
-from langchain.vectorstores.pgvector import CollectionStore
 from uuid import uuid4
+
+from sqlalchemy import BigInteger, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
+from awesoon.model.schema import Base
+from awesoon.model.schema.scan import Scan
 
 
 class ShopNegativeKeyWord(Base):
@@ -28,9 +29,7 @@ class Shop(Base):
         "ShopNegativeKeyWord",
         foreign_keys=[ShopNegativeKeyWord.shop_id],
     )
-    collection_id = Column(ForeignKey(CollectionStore.uuid))
-    collection = relationship("CollectionStore", foreign_keys=[collection_id])
-    docs_version = Column(String, nullable=True)
+    latest_scan_id = Column(ForeignKey(Scan.guid))
 
 
 class ShopifyApp(Base):

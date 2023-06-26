@@ -1,5 +1,7 @@
 
 from sqlalchemy import and_, delete, select
+from sqlalchemy.orm import Session
+
 from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema.shop import NegativeKeyWord, Shop, ShopNegativeKeyWord
 
@@ -12,7 +14,7 @@ def get_shop_with_identifier(session, shop_identifier: int) -> Shop:
     return shop
 
 
-def get_all_shops(session, args: dict):
+def get_all_shops(session: Session, args: dict):
     query = select(Shop)
     if args["shop_url"]:
         query = query.filter(
@@ -21,7 +23,7 @@ def get_all_shops(session, args: dict):
     return session.scalars(query).all()
 
 
-def upsert_shop(session, shop_identifier: int, data: dict):
+def upsert_shop(session: Session, shop_identifier: int, data: dict):
     try:
         shop = get_shop_with_identifier(session, shop_identifier)
         for field in data:
@@ -32,7 +34,7 @@ def upsert_shop(session, shop_identifier: int, data: dict):
     return shop
 
 
-def upsert_keyword(session, word: str):
+def upsert_keyword(session: Session, word: str):
     query = select(NegativeKeyWord).where(NegativeKeyWord.word == word)
     result = session.scalars(query).first()
     if result:
@@ -41,7 +43,7 @@ def upsert_keyword(session, word: str):
         return NegativeKeyWord(word=word)
 
 
-def upsert_shop_negative_keyword(session, word: str, shop_identifier: int):
+def upsert_shop_negative_keyword(session: Session, word: str, shop_identifier: int):
     shop = get_shop_with_identifier(session, shop_identifier)
     session.add(upsert_keyword(session, word))
     query = select(ShopNegativeKeyWord).where(
@@ -53,7 +55,7 @@ def upsert_shop_negative_keyword(session, word: str, shop_identifier: int):
     return shop
 
 
-def delete_negative_keyword(session, word: str, shop_identifier: int):
+def delete_negative_keyword(session: Session, word: str, shop_identifier: int):
     shop = get_shop_with_identifier(session, shop_identifier)
     query = delete(ShopNegativeKeyWord).where(and_(
             ShopNegativeKeyWord.shop_id == shop.id
@@ -65,7 +67,7 @@ def delete_negative_keyword(session, word: str, shop_identifier: int):
     session.execute(query)
 
 
-def get_keywords_for_shop(session, shop_identifier: int):
+def get_keywords_for_shop(session: Session, shop_identifier: int):
     shop = get_shop_with_identifier(session, shop_identifier)
     result = []
     for shopKw in shop.negative_keywords:

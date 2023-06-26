@@ -7,7 +7,6 @@ dependencies:
         - flask_cors
         - gevent
         - gunicorn
-        - langchain
         - marshmallow
         - pip
         - psycopg2

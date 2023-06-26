@@ -140,7 +140,7 @@ class ShopDoc(Resource):
 @ns.route("/<id>/closest-doc")
 class ClosestShopDoc(Resource):
     @ns.expect(query_doc_model)
-    def get(self, id):
+    def post(self, id):
         with Session() as session:
             try:
                 doc_data = query_doc_parser.parse_args()

@@ -3,7 +3,6 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from awesoon.model.schema import shop, scan, doc
 
 Base = declarative_base()
 
@@ -16,7 +15,7 @@ url = f"postgresql://{username}:{password}@{host}:{port}/{dbname}"
 
 
 engine = create_engine(url, echo=False, future=True)
-Session = sessionmaker(bind=engine)
 
 Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
 

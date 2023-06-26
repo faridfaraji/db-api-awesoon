@@ -24,4 +24,6 @@ def add_docs_parser(parser):
     parser.add_argument("hash", type=str, default=None, location="json")
     parser.add_argument("doc_type", type=str, default=None, location="json")
     parser.add_argument("doc_identifier", type=str, default=None, location="json")
+    return parser
+
 

@@ -69,7 +69,7 @@ def update_doc(session: Session, doc: dict, doc_id: str):
     return scan_doc
 
 
-def get_shop_docs(session: Session, shop_id: int, args: dict):
+def get_shop_docs(session: Session, shop_id: int):
     query = (
         select(*DOC_COLUMNS, ScanDoc.guid.label("id"))
         .join(ScanDoc, ScanDoc.doc_id == Doc.id)

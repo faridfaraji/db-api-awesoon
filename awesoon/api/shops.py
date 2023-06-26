@@ -5,7 +5,6 @@ from flask_restx import Namespace, Resource, fields, marshal
 
 from awesoon.api.model.docs import doc, query_doc
 from awesoon.api.model.shops import add_shop_parser, shop, shopify_installation
-from awesoon.api.util import add_docs_search_params
 from awesoon.constants import SUCCESS_MESSAGE
 from awesoon.core.database.docs import get_closest_shop_doc, get_shop_docs
 from awesoon.core.database.shopify import (
@@ -24,43 +23,38 @@ from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema import Session
 from awesoon.model.schema.shop import ShopifyAppInstallation
 
-ns = Namespace("shops", "This namespace is resposible for retrieving and storing the shops info.")
+api = Namespace("shops", "This namespace is resposible for retrieving and storing the shops info.")
 
 #########
-shop_model = ns.model("model", shop)
-doc_model = ns.model("doc", doc)
-query_doc_model = ns.model("closest_doc", query_doc)
-shopify_installation_model = ns.model("shopify_installation", shopify_installation)
+shop_model = api.model("model", shop)
+doc_model = api.model("doc", doc)
+query_doc_model = api.model("closest_doc", query_doc)
+shopify_installation_model = api.model("shopify_installation", shopify_installation)
 #########
 
-shop_parser = ns.parser()
+shop_parser = api.parser()
 add_shop_parser(shop_parser)
 
 
-get_shop_parser = ns.parser()
+get_shop_parser = api.parser()
 get_shop_parser.add_argument("shop_url", type=str, default=None, location="values")
 
 
-get_doc_parser = ns.parser()
-get_doc_parser = add_docs_search_params(get_doc_parser)
-
-
-query_doc_parser = ns.parser()
+query_doc_parser = api.parser()
 query_doc_parser.add_argument("query_embedding", type=list, default=None, location="json")
 query_doc_parser.add_argument("number_of_docs", type=int, default=None, location="json")
-query_doc_parser = add_docs_search_params(query_doc_parser)
 
-shopify_installation_parser = ns.parser()
+shopify_installation_parser = api.parser()
 shopify_installation_parser.add_argument("app_name", type=str, default=None, location="json")
 shopify_installation_parser.add_argument("access_token", type=str, default=None, location="json")
 
-get_shopify_installation_parser = ns.parser()
+get_shopify_installation_parser = api.parser()
 get_shopify_installation_parser.add_argument("app_name", type=str, default=None, location="values")
 
 
-@ns.route("")
+@api.route("")
 class Shops(Resource):
-    @ns.expect(get_shop_parser)
+    @api.expect(get_shop_parser)
     def get(self):
         args = get_shop_parser.parse_args()
         with Session() as session:
@@ -69,7 +63,7 @@ class Shops(Resource):
         return marshalled_shops, 200
 
 
-@ns.route("/<id>")
+@api.route("/<id>")
 class SingleShop(Resource):
     def get(self, id):
         try:
@@ -78,9 +72,9 @@ class SingleShop(Resource):
                 marshalled_shop = marshal(shop, shop_model)
             return marshalled_shop, 200
         except ShopNotFoundError:
-            ns.abort(404, "Shop Not Found")
+            api.abort(404, "Shop Not Found")
 
-    @ns.expect(shop_parser)
+    @api.expect(shop_parser)
     def put(self, id):
         data = shop_parser.parse_args()
         with Session() as session:
@@ -90,10 +84,10 @@ class SingleShop(Resource):
                 return id, 200
             except Exception as e:
                 print(e, file=sys.stderr)
-                ns.abort(500)
+                api.abort(500)
 
 
-@ns.route("/<id>/negative-keywords")
+@api.route("/<id>/negative-keywords")
 class NegativeKeyWords(Resource):
     def get(self, id):
         with Session() as session:
@@ -101,7 +95,7 @@ class NegativeKeyWords(Resource):
             return keywords, 200
 
 
-@ns.route("/<id>/negative-keywords/<word>")
+@api.route("/<id>/negative-keywords/<word>")
 class SingleNegativeKeyWord(Resource):
     def put(self, id, word):
         with Session() as session:
@@ -111,7 +105,7 @@ class SingleNegativeKeyWord(Resource):
                 return SUCCESS_MESSAGE, 200
             except Exception as e:
                 print(e, file=sys.stderr)
-                ns.abort(500)
+                api.abort(500)
 
     def delete(self, id, word):
         with Session() as session:
@@ -121,26 +115,25 @@ class SingleNegativeKeyWord(Resource):
                 return id, 200
             except Exception as e:
                 print(e, file=sys.stderr)
-                ns.abort(500)
+                api.abort(500)
 
 
-@ns.route("/<id>/docs")
+@api.route("/<id>/docs")
 class ShopDoc(Resource):
-    @ns.expect(get_doc_parser)
+    @api.marshal_with(doc_model)
     def get(self, id):
         with Session() as session:
             try:
-                args = get_doc_parser.parse_args()
-                docs = get_shop_docs(session, id, args)
+                docs = get_shop_docs(session, id)
                 return marshal(docs, doc_model), 200
             except Exception as e:
                 print(e, file=sys.stderr)
-                ns.abort(500)
+                api.abort(500)
 
 
-@ns.route("/<id>/closest-doc")
+@api.route("/<id>/closest-doc")
 class ClosestShopDoc(Resource):
-    @ns.expect(query_doc_model)
+    @api.expect(query_doc_model)
     def post(self, id):
         with Session() as session:
             try:
@@ -151,12 +144,12 @@ class ClosestShopDoc(Resource):
                 return marshal(docs, doc_model)
             except Exception as e:
                 print(e, file=sys.stderr)
-                ns.abort(500)
+                api.abort(500)
 
 
-@ns.route("/<id>/shopify-installations")
+@api.route("/<id>/shopify-installations")
 class ShopifyInstallation(Resource):
-    @ns.expect(get_shopify_installation_parser)
+    @api.expect(get_shopify_installation_parser)
     def get(self, id):
         with Session() as session:
             try:
@@ -165,9 +158,9 @@ class ShopifyInstallation(Resource):
                 return marshal(shopify_app_installations, shopify_installation_model)
             except Exception as e:
                 print(e, file=sys.stderr)
-                ns.abort(500)
+                api.abort(500)
 
-    @ns.expect(shopify_installation_parser)
+    @api.expect(shopify_installation_parser)
     def post(self, id):
         with Session() as session:
             try:
@@ -181,7 +174,7 @@ class ShopifyInstallation(Resource):
                 session.commit()
                 return SUCCESS_MESSAGE, 200
             except sqlalchemy.exc.IntegrityError:
-                ns.abort(400, "This installation is not allowed")
+                api.abort(400, "This installation is not allowed")
             except Exception as e:
                 print(e, file=sys.stderr)
-                ns.abort(500)
+                api.abort(500)

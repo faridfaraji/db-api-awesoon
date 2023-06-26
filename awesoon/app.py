@@ -5,12 +5,12 @@ from flask import Blueprint, Flask
 from flask_cors import CORS
 from flask_restx import Api
 
-from awesoon.api.docs import ns as docs_ns
-from awesoon.api.health import ns as health_ns
-from awesoon.api.scans import ns as scans_ns
-from awesoon.api.shopify import ns as shopify_apps_ns
-from awesoon.api.shopify_installations import ns as shopify_installations_ns
-from awesoon.api.shops import ns as shops_ns
+from awesoon.api.docs import api as docs_ns
+from awesoon.api.health import api as health_ns
+from awesoon.api.scans import api as scans_ns
+from awesoon.api.shopify import api as shopify_apps_ns
+from awesoon.api.shopify_installations import api as shopify_installations_ns
+from awesoon.api.shops import api as shops_ns
 from awesoon.config import load
 
 config = load(os.environ.get('ENVIRONMENT', 'local'))

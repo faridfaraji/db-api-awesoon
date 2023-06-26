@@ -1,14 +1,17 @@
 import sys
 
-from flask_restx import Namespace, Resource, marshal, fields
 import sqlalchemy
+from flask_restx import Namespace, Resource, fields, marshal
 
-from awesoon.api.model.shops import add_shop_parser, shop, shopify_installation
 from awesoon.api.model.docs import doc, query_doc
+from awesoon.api.model.shops import add_shop_parser, shop, shopify_installation
+from awesoon.api.util import add_docs_search_params
 from awesoon.constants import SUCCESS_MESSAGE
-
 from awesoon.core.database.docs import get_closest_shop_doc, get_shop_docs
-from awesoon.core.database.shopify import get_all_shopify_app_installations, get_shopify_app_with_name
+from awesoon.core.database.shopify import (
+    get_all_shopify_app_installations,
+    get_shopify_app_with_name,
+)
 from awesoon.core.database.shops import (
     delete_negative_keyword,
     get_all_shops,
@@ -20,8 +23,6 @@ from awesoon.core.database.shops import (
 from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema import Session
 from awesoon.model.schema.shop import ShopifyAppInstallation
-from awesoon.api.util import add_docs_search_params
-from flask_restx import Namespace, Resource, marshal
 
 ns = Namespace("shops", "This namespace is resposible for retrieving and storing the shops info.")
 

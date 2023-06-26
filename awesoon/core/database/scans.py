@@ -1,13 +1,13 @@
 from typing import List
+
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
+
 from awesoon.core.database.shops import get_shop_with_identifier
 from awesoon.core.exceptions import ScanNotFoundError
 from awesoon.model.schema.doc import Doc
-
 from awesoon.model.schema.scan import Scan, ScanDoc
 from awesoon.model.schema.shop import Shop
-
 
 SCAN_COLUMNS = [c.label("id") if c.name == "guid"
                 else c for c in Scan.__table__.c if c.name != "shop_id"]

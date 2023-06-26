@@ -1,10 +1,11 @@
 import enum
 from uuid import uuid4
-from awesoon.model.schema import Base
-from sqlalchemy import Column, Integer, String, Enum
-from awesoon.model.schema.doc_enums import DocType
 
 from pgvector.sqlalchemy import Vector
+from sqlalchemy import Column, Enum, Integer, String
+
+from awesoon.model.schema import Base
+from awesoon.model.schema.doc_enums import DocType
 
 ADA_TOKEN_COUNT = 2
 

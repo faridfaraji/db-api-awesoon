@@ -1,16 +1,23 @@
-from copy import copy
 import sys
+from copy import copy
+
 from flask_restx import Namespace, Resource, marshal
+
+from awesoon.api.model.docs import add_docs_parser, doc
+from awesoon.api.model.scans import scan, scan_status
+from awesoon.api.util import add_docs_search_params
 from awesoon.constants import SUCCESS_MESSAGE
 from awesoon.core.database.docs import add_scan_doc, get_scan_docs
-from awesoon.core.database.scans import add_scan, get_scan_by_id, get_scans, get_scans_with_shop_id, update_scan, update_scan_status
+from awesoon.core.database.scans import (
+    add_scan,
+    get_scan_by_id,
+    get_scans,
+    get_scans_with_shop_id,
+    update_scan,
+    update_scan_status,
+)
 from awesoon.core.exceptions import ScanNotFoundError, ShopNotFoundError
-
 from awesoon.model.schema import Session
-from awesoon.api.model.scans import scan, scan_status
-
-from awesoon.api.util import add_docs_search_params
-from awesoon.api.model.docs import doc, add_docs_parser
 from awesoon.model.schema.doc import ADA_TOKEN_COUNT
 
 ns = Namespace("scans", "This namespace is resposible for adding and retrieving shop scans")

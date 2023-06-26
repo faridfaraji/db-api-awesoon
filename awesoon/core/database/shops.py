@@ -1,8 +1,9 @@
 
 from sqlalchemy import and_, delete, select
+from sqlalchemy.orm import Session
+
 from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema.shop import NegativeKeyWord, Shop, ShopNegativeKeyWord
-from sqlalchemy.orm import Session
 
 
 def get_shop_with_identifier(session, shop_identifier: int) -> Shop:

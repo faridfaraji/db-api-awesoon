@@ -1,13 +1,14 @@
 from typing import List
-from sqlalchemy import delete, select
+
 import sqlalchemy
+from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
+
 from awesoon.core.database.scans import get_scan_object_by_scan_id
 from awesoon.core.exceptions import DocNotFoundError
 from awesoon.model.schema.doc import DEFAULT_DISTANCE_STRATEGY, Doc
 from awesoon.model.schema.scan import Scan, ScanDoc
 from awesoon.model.schema.shop import Shop
-
 
 DOC_COLUMNS = [c.label("id") if c.name == "guid"
                else c for c in Doc.__table__.c if c.name != "id"]

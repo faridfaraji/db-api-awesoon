@@ -2,7 +2,6 @@ from flask_restx import fields
 
 from awesoon.model.schema.scan_enums import ScanStatus, TriggerType
 
-
 scan = {
     "id": fields.String(readonly=True),
     "trigger_type": fields.String(enum=[enum.value for enum in TriggerType], required=True),

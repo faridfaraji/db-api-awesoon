@@ -1,12 +1,12 @@
 import sys
+
 from flask_restx import Namespace, Resource, marshal
 
 from awesoon.api.model.shops import shopify_app
 from awesoon.constants import SUCCESS_MESSAGE
 from awesoon.core.database.shopify import get_shopify_apps
-from awesoon.model.schema.shop import ShopifyApp as ShopifyAppSchema
-
 from awesoon.model.schema import Session
+from awesoon.model.schema.shop import ShopifyApp as ShopifyAppSchema
 
 ns = Namespace("shopify-apps", "This namespace is resposible for adding and retrieving shopify apps")
 

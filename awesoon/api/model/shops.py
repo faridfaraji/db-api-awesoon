@@ -1,6 +1,5 @@
 from flask_restx import fields
 
-
 shop = {
     "shop_name": fields.String(required=True),
     "shop_identifier": fields.Integer(required=True),

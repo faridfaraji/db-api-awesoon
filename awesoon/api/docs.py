@@ -1,8 +1,10 @@
 
 import sys
+
 from flask_restx import Namespace, Resource, marshal
+
+from awesoon.api.model.docs import add_docs_parser, doc
 from awesoon.api.util import add_docs_search_params
-from awesoon.api.model.docs import doc, add_docs_parser
 from awesoon.constants import SUCCESS_MESSAGE
 from awesoon.core.database.docs import delete_doc, get_doc_by_id, update_doc
 from awesoon.core.exceptions import DocNotFoundError

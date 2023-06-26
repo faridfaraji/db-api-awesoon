@@ -1,6 +1,8 @@
 from uuid import uuid4
+
+from sqlalchemy import Column, Enum, ForeignKey, Integer, String
+
 from awesoon.model.schema import Base
-from sqlalchemy import Column, ForeignKey, Integer, String, Enum
 from awesoon.model.schema.scan_enums import ScanStatus, TriggerType
 
 

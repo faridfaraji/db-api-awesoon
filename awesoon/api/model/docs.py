@@ -2,7 +2,6 @@ from flask_restx import fields
 
 from awesoon.model.schema.doc_enums import DocType
 
-
 doc = {
     "id": fields.String(readonly=True),
     "document": fields.String(),

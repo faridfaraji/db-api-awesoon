@@ -1,8 +1,9 @@
-from awesoon.model.schema import Base
-from sqlalchemy import BigInteger, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
 from uuid import uuid4
 
+from sqlalchemy import BigInteger, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
+from awesoon.model.schema import Base
 from awesoon.model.schema.scan import Scan
 
 

@@ -1,5 +1,4 @@
 import enum
-from uuid import uuid4
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import Column, Enum, Integer, String
@@ -7,7 +6,7 @@ from sqlalchemy import Column, Enum, Integer, String
 from awesoon.model.schema import Base
 from awesoon.model.schema.doc_enums import DocType
 
-ADA_TOKEN_COUNT = 2
+ADA_TOKEN_COUNT = 1536
 
 
 class Doc(Base):

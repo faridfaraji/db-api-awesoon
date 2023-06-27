@@ -5,6 +5,7 @@ from flask import Blueprint, Flask
 from flask_cors import CORS
 from flask_restx import Api
 
+from awesoon.api.conversations import api as conversations_ns
 from awesoon.api.docs import api as docs_ns
 from awesoon.api.health import api as health_ns
 from awesoon.api.scans import api as scans_ns
@@ -35,6 +36,8 @@ def create_app():
     api_v1.add_namespace(shopify_apps_ns)
     api_v1.add_namespace(docs_ns)
     api_v1.add_namespace(shopify_installations_ns)
+    api_v1.add_namespace(shopify_installations_ns)
+    api_v1.add_namespace(conversations_ns)
     app.register_blueprint(v1_blueprint)
     app.register_blueprint(health_blueprint)
 

@@ -3,7 +3,7 @@ from uuid import uuid4
 from sqlalchemy import Column, Enum, ForeignKey, Integer, String
 
 from awesoon.model.schema import Base
-from awesoon.model.schema.scan_enums import ScanStatus, TriggerType
+from awesoon.model.schema.utils import ScanStatus, TriggerType
 
 
 class Scan(Base):

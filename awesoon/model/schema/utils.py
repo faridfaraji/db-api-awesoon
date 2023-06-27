@@ -1,6 +1,13 @@
 import enum
 
 
+class DocType(enum.Enum):
+    PRODUCT = "PRODUCT"
+    CATEGORY = "CATEGORY"
+    ORDER = "ORDER"
+    POLICY = "POLICY"
+
+
 class ScanStatus(enum.Enum):
     PENDING = "PENDING"
     IN_PROGRESS = "IN_PROGRESS"
@@ -12,3 +19,8 @@ class TriggerType(enum.Enum):
     MANUAL = "MANUAL"
     SCHEDULED = "SCHEDULED"
     WEBHOOK = "WEBHOOK"
+
+
+class MessageType(enum.Enum):
+    AI = "AI"
+    USER = "USER"

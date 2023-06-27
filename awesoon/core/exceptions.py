@@ -9,3 +9,7 @@ class ScanNotFoundError(Exception):
 
 class DocNotFoundError(Exception):
     pass
+
+
+class ConversationNotFoundError(Exception):
+    pass

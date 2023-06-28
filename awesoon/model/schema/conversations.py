@@ -34,8 +34,8 @@ class Conversation(Base):
 
     @hybrid_property
     def ai_message_count(self):
-        return sum(1 for message in self.messages if message.message_type == 'AI')
+        return sum(1 for message in self.messages if message.message_type == MessageType.AI)
 
     @hybrid_property
     def user_message_count(self):
-        return sum(1 for message in self.messages if message.message_type == 'USER')
+        return sum(1 for message in self.messages if message.message_type == MessageType.USER)

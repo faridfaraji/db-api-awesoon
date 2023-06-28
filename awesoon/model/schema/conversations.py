@@ -3,6 +3,7 @@ from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func, Enum
 from awesoon.model.schema import Base
 from awesoon.model.schema.utils import MessageType
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class Message(Base):
@@ -30,3 +31,11 @@ class Conversation(Base):
     shop = relationship(
         "Shop", foreign_keys=[shop_id]
     )
+
+    @hybrid_property
+    def ai_message_count(self):
+        return sum(1 for message in self.messages if message.message_type == 'AI')
+
+    @hybrid_property
+    def user_message_count(self):
+        return sum(1 for message in self.messages if message.message_type == 'USER')

@@ -7,9 +7,6 @@ from awesoon.core.exceptions import ConversationNotFoundError
 from awesoon.model.schema.conversations import Conversation, Message
 from awesoon.model.schema.shop import Shop
 
-# CONV_COLUMNS = [c.label("id") if c.name == "guid"
-#                 else c for c in Conversation.__table__.c if c.name != "id"]
-
 
 def get_conversations_by_shop(session: Session, shop_id: int):
     query = select(
@@ -38,15 +35,17 @@ def get_conversations(session: Session, filter_args: dict):
     if filter_args["shop_id"]:
         query = query.join(Shop, Shop.id == Conversation.shop_id)
         query = query.where(Shop.shop_identifier == filter_args["shop_id"])
-    return session.scalars(query).all()
+    return session.execute(query).scalars().all()
 
 
 def get_conversation_by_id(session: Session, conversation_id: str):
     query = select(
         Conversation
+    ).join(
+        Message, Message.conversation_id == Conversation.id
     ).where(
         Conversation.id == conversation_id
-    )
+    ).group_by(Message.message_type)
     conversation = session.scalars(query).first()
     if conversation is None:
         raise ConversationNotFoundError
@@ -87,8 +86,6 @@ def add_conversation(session: Session, conversation_data: dict):
     message_ids = conversation_data.pop("messages")
     shop_id = conversation_data.pop("shop_id")
     shop = get_shop_with_identifier(session, shop_id)
-    if message_ids:
-        pass
     conversation = Conversation(**conversation_data)
     conversation.shop_id = shop.id
     conversation.messages = get_messages_by_ids(session, message_ids)

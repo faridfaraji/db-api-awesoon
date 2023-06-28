@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from awesoon.core.database.shops import get_shop_with_identifier
@@ -21,10 +22,22 @@ def get_conversations_by_shop(session: Session, shop_id: int):
     return session.scalars(query).all()
 
 
-def get_conversations(session: Session):
+def get_messages_by_ids(session: Session, message_ids: List[str]) -> List[Message]:
+    query = select(
+        Message
+    ).filter(
+        Message.guid.in_(message_ids)
+    )
+    return session.scalars(query).all()
+
+
+def get_conversations(session: Session, filter_args: dict):
     query = select(
         Conversation
     )
+    if filter_args["shop_id"]:
+        query = query.join(Shop, Shop.id == Conversation.shop_id)
+        query = query.where(Shop.shop_identifier == filter_args["shop_id"])
     return session.scalars(query).all()
 
 
@@ -78,5 +91,6 @@ def add_conversation(session: Session, conversation_data: dict):
         pass
     conversation = Conversation(**conversation_data)
     conversation.shop_id = shop.id
+    conversation.messages = get_messages_by_ids(session, message_ids)
     session.add(conversation)
     return conversation

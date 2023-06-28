@@ -2,7 +2,7 @@
 import sys
 
 from flask_restx import Namespace, Resource, marshal
-from awesoon.api.model.conversations import add_convesation_parser, add_message_parser, conversation, message
+from awesoon.api.model.conversations import add_conversation_search_params, add_convesation_parser, add_message_parser, conversation, message
 
 from awesoon.constants import SUCCESS_MESSAGE
 from awesoon.core.database.conversations import add_conversation, add_conversation_message, get_conversation_messages, get_conversations
@@ -19,15 +19,19 @@ conversation_model = api.model("conversation_model", conversation)
 
 conversation_parser = api.parser()
 message_parser = api.parser()
+get_conversation_parser = api.parser()
 conversation_parser = add_convesation_parser(conversation_parser)
 message_parser = add_message_parser(message_parser)
+get_conversation_parser = add_conversation_search_params(get_conversation_parser)
 
 
 @api.route("")
 class Conversation(Resource):
+    @api.expect(get_conversation_parser)
     def get(self):
+        args = get_conversation_parser.parse_args()
         with Session() as session:
-            conversations = get_conversations(session)
+            conversations = get_conversations(session, args)
             return marshal(conversations, conversation_model), 200
 
     @api.expect(conversation_model)

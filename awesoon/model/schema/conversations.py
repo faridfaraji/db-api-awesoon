@@ -27,3 +27,6 @@ class Conversation(Base):
         "Message", foreign_keys=[Message.conversation_id],
         cascade="save-update, merge, delete, delete-orphan",
     )
+    shop = relationship(
+        "Shop", foreign_keys=[shop_id]
+    )

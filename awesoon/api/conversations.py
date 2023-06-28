@@ -5,7 +5,7 @@ from flask_restx import Namespace, Resource, marshal
 from awesoon.api.model.conversations import add_conversation_search_params, add_conversation_parser, add_message_parser, conversation, message
 
 from awesoon.constants import SUCCESS_MESSAGE
-from awesoon.core.database.conversations import add_conversation, add_conversation_message, get_conversation_messages, get_conversations
+from awesoon.core.database.conversations import add_conversation, add_conversation_message, get_conversation_by_id, get_conversation_messages, get_conversations
 from awesoon.core.exceptions import ConversationNotFoundError, ShopNotFoundError
 from awesoon.model.schema import Session
 import logging
@@ -49,6 +49,14 @@ class Conversation(Resource):
             except Exception as e:
                 print(e, file=sys.stderr)
                 api.abort(500)
+
+
+@api.route("/<conversation_id>")
+class SingleConversation(Resource):
+    def get(self, conversation_id):
+        with Session() as session:
+            conversation = get_conversation_by_id(session, conversation_id)
+            return marshal(conversation, conversation_model), 200
 
 
 @api.route("/<conversation_id>/messages")

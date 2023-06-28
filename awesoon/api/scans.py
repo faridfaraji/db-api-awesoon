@@ -18,7 +18,7 @@ from awesoon.core.exceptions import ScanNotFoundError, ShopNotFoundError
 from awesoon.model.schema import Session
 from awesoon.model.schema.doc import ADA_TOKEN_COUNT
 
-api = Namespace("scans", "This namespace is resposible for adding and retrieving shop scans")
+api = Namespace("scans", "This namespace is responsible for adding and retrieving shop scans")
 
 ############
 scan_model = api.model("scan", scan)

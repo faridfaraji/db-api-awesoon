@@ -4,7 +4,7 @@ from pgvector.sqlalchemy import Vector
 from sqlalchemy import Column, Enum, Integer, String
 
 from awesoon.model.schema import Base
-from awesoon.model.schema.doc_enums import DocType
+from awesoon.model.schema.utils import DocType
 
 ADA_TOKEN_COUNT = 1536
 

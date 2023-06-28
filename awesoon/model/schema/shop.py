@@ -4,7 +4,9 @@ from sqlalchemy import BigInteger, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from awesoon.model.schema import Base
+from awesoon.model.schema.conversations import Conversation
 from awesoon.model.schema.scan import Scan
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class ShopNegativeKeyWord(Base):
@@ -30,6 +32,14 @@ class Shop(Base):
         foreign_keys=[ShopNegativeKeyWord.shop_id],
     )
     latest_scan_id = Column(ForeignKey(Scan.guid))
+    conversations = relationship(
+        "Conversation", foreign_keys=[Conversation.shop_id],
+        cascade="save-update, merge, delete, delete-orphan",
+    )
+
+    @hybrid_property
+    def conversations_count(self):
+        return len(self.conversations)
 
 
 class ShopifyApp(Base):

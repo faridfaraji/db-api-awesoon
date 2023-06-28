@@ -5,6 +5,7 @@ shop = {
     "shop_identifier": fields.Integer(required=True),
     "shop_url": fields.String(required=True),
     "contact_email": fields.String(required=True),
+    "conversations_count": fields.Integer(readonly=True),
     "latest_scan_id": fields.String(required=True),
 }
 
@@ -19,7 +20,7 @@ shopify_installation = {
     "id": fields.String(readonly=True),
     "app_name": fields.String(required=True),
     "access_token": fields.String(required=True),
-    "shop_url": fields.String(required=True),
+    "shop_url": fields.String(required=True)
 }
 
 

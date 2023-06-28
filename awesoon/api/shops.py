@@ -23,7 +23,7 @@ from awesoon.core.exceptions import ShopNotFoundError
 from awesoon.model.schema import Session
 from awesoon.model.schema.shop import ShopifyAppInstallation
 
-api = Namespace("shops", "This namespace is resposible for retrieving and storing the shops info.")
+api = Namespace("shops", "This namespace is responsible for retrieving and storing the shops info.")
 
 #########
 shop_model = api.model("model", shop)

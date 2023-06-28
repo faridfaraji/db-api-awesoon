@@ -35,7 +35,7 @@ conversation = {
 }
 
 
-def add_convesation_parser(parser):
+def add_conversation_parser(parser):
     parser.add_argument("shop_id", type=int, default=None, location="json")
     parser.add_argument("messages", type=list, default=None, location="json")
     return parser

@@ -2,7 +2,7 @@
 import sys
 
 from flask_restx import Namespace, Resource, marshal
-from awesoon.api.model.conversations import add_conversation_search_params, add_convesation_parser, add_message_parser, conversation, message
+from awesoon.api.model.conversations import add_conversation_search_params, add_conversation_parser, add_message_parser, conversation, message
 
 from awesoon.constants import SUCCESS_MESSAGE
 from awesoon.core.database.conversations import add_conversation, add_conversation_message, get_conversation_messages, get_conversations
@@ -11,7 +11,8 @@ from awesoon.model.schema import Session
 import logging
 
 
-api = Namespace("conversations", "This namespace is resposible for adding and retrieving converation and messages of it")
+api = Namespace("conversations", "This namespace is responsible for adding and retrieving "
+                "conversations and messages of User and AI")
 ############
 message_model = api.model("message_model", message)
 conversation_model = api.model("conversation_model", conversation)
@@ -20,7 +21,7 @@ conversation_model = api.model("conversation_model", conversation)
 conversation_parser = api.parser()
 message_parser = api.parser()
 get_conversation_parser = api.parser()
-conversation_parser = add_convesation_parser(conversation_parser)
+conversation_parser = add_conversation_parser(conversation_parser)
 message_parser = add_message_parser(message_parser)
 get_conversation_parser = add_conversation_search_params(get_conversation_parser)
 

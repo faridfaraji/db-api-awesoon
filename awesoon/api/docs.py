@@ -10,7 +10,7 @@ from awesoon.core.exceptions import DocNotFoundError
 from awesoon.model.schema import Session
 from awesoon.model.schema.doc import ADA_TOKEN_COUNT
 
-api = Namespace("docs", "This namespace is resposible for updating and deleting docs")
+api = Namespace("docs", "This namespace is responsible for updating and deleting docs")
 
 doc_parser = api.parser()
 add_docs_parser(doc_parser)

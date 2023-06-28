@@ -8,7 +8,7 @@ from awesoon.core.database.shopify import get_shopify_apps
 from awesoon.model.schema import Session
 from awesoon.model.schema.shop import ShopifyApp as ShopifyAppSchema
 
-api = Namespace("shopify-apps", "This namespace is resposible for adding and retrieving shopify apps")
+api = Namespace("shopify-apps", "This namespace is responsible for adding and retrieving shopify apps")
 
 shopify_app_model = api.model("shopify-app", shopify_app)
 shopify_app_parser = api.parser()

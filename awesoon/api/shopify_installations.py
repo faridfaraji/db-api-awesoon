@@ -6,7 +6,7 @@ from awesoon.core.database.shopify import delete_shop_shopify_installation
 from awesoon.model.schema import Session
 
 api = Namespace(
-    "shopify-installations", "This namespace is resposible for adding and retrieving shopify installations")
+    "shopify-installations", "This namespace is responsible for adding and retrieving shopify installations")
 
 
 @api.route("/<id>")

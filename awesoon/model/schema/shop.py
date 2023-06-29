@@ -8,6 +8,8 @@ from awesoon.model.schema.conversations import Conversation
 from awesoon.model.schema.scan import Scan
 from sqlalchemy.ext.hybrid import hybrid_property
 
+from awesoon.model.schema.utils import MessageType
+
 
 class ShopNegativeKeyWord(Base):
     __tablename__ = "shop_nk_associations"
@@ -40,6 +42,14 @@ class Shop(Base):
     @hybrid_property
     def conversations_count(self):
         return len(self.conversations)
+
+    @hybrid_property
+    def message_counts(self):
+        message_counts = 0
+        for conversation in self.conversations:
+            message_counts += sum(1 for message in conversation.messages
+                                  if message.message_type == MessageType.USER.value)
+        return message_counts
 
 
 class ShopifyApp(Base):

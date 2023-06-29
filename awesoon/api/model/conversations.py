@@ -29,8 +29,8 @@ conversation = {
     "shop_id": Shop(attribute="shop"),
     "timestamp": fields.DateTime(required=False, readonly=True),
     "messages": Message(fields.String),
-    "ai_message_count": fields.Integer(),
-    "user_message_count": fields.Integer()
+    "ai_message_count": fields.Integer(readonly=True),
+    "user_message_count": fields.Integer(readonly=True)
 }
 
 

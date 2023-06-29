@@ -30,8 +30,6 @@ def get_messages_by_ids(session: Session, message_ids: List[str]) -> List[Messag
 def get_conversations(session: Session, filter_args: dict):
     query = select(
         Conversation
-    ).join(
-        Message, Message.conversation_id == Conversation.id
     )
     if filter_args["shop_id"]:
         query = query.join(Shop, Shop.id == Conversation.shop_id)

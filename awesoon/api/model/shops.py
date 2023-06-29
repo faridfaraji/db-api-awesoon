@@ -6,6 +6,7 @@ shop = {
     "shop_url": fields.String(required=True),
     "contact_email": fields.String(required=True),
     "conversations_count": fields.Integer(readonly=True),
+    "message_counts": fields.Integer(readonly=True),
     "latest_scan_id": fields.String(required=True),
 }
 

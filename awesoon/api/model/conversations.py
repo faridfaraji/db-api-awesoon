@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from flask_restx import fields
 
 from awesoon.model.schema.utils import MessageType
@@ -20,7 +20,7 @@ class Shop(fields.Integer):
 message = {
     "message_type": fields.String(enum=[enum.value for enum in MessageType], required=True),
     "message": fields.String(),
-    "timestamp": fields.DateTime(required=False, readonly=True)
+    "timestamp": fields.DateTime(default=datetime.utcnow())
 }
 
 
@@ -29,8 +29,8 @@ conversation = {
     "shop_id": Shop(attribute="shop"),
     "timestamp": fields.DateTime(required=False, readonly=True),
     "messages": Message(fields.String),
-    "ai_message_count": fields.Integer(),
-    "user_message_count": fields.Integer()
+    "ai_message_count": fields.Integer(readonly=True),
+    "user_message_count": fields.Integer(readonly=True)
 }
 
 
@@ -43,6 +43,7 @@ def add_conversation_parser(parser):
 def add_message_parser(parser):
     parser.add_argument("message_type", type=str, default=None, location="json")
     parser.add_argument("message", type=str, default=None, location="json")
+    parser.add_argument("timestamp", type=str, default=None, location="json")
     return parser
 
 

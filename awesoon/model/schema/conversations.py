@@ -15,7 +15,7 @@ class Message(Base):
         name="message_type", create_type=False, validate_strings=True), index=True)
     message = Column(String)
     token_count = Column(Integer)
-    timestamp = Column(DateTime, server_default=func.now())
+    timestamp = Column(DateTime, default=func.now())
     conversation_id = Column(ForeignKey("conversation_threads.id"))
 
 

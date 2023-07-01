@@ -27,4 +27,4 @@ class DistanceStrategy(str, enum.Enum):
     MAX_INNER_PRODUCT = Doc.embedding.max_inner_product
 
 
-DEFAULT_DISTANCE_STRATEGY = DistanceStrategy.COSINE
+DEFAULT_DISTANCE_STRATEGY = DistanceStrategy.MAX_INNER_PRODUCT

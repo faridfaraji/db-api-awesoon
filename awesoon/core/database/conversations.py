@@ -52,7 +52,7 @@ def get_conversation_by_id(session: Session, conversation_id: str, filter_args: 
     return conversation
 
 
-def get_conversation_messages(session: Session, conversation_id: str, filter_args: dict):
+def get_conversation_messages(session: Session, conversation_id: str, filter_args: dict = None):
     query = select(
         Message
     ).join(

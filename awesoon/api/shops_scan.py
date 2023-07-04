@@ -10,7 +10,7 @@ from awesoon.model.schema import Session
 scan_model = api.model("scan", scan)
 
 
-@api.route("<id>/scans/<scan_id>")
+@api.route("/<id>/scans/<scan_id>")
 class SingleShopScan(Resource):
     def get(self, id, scan_id):
         try:

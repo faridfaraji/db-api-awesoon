@@ -54,7 +54,7 @@ def get_scans_with_shop_id(session: Session, shop_id: int):
     return session.execute(query).all()
 
 
-def get_scan_by_id(session: Session, scan_id: int):
+def get_scan_by_id(session: Session, scan_id: int, filter=None):
     """returns scan with id
 
     Args:
@@ -67,6 +67,9 @@ def get_scan_by_id(session: Session, scan_id: int):
     query = select(
         *SCAN_COLUMNS, Shop.shop_identifier.label("shop_id")
     ).join(Shop, Shop.id == Scan.shop_id).where(Scan.guid == scan_id)
+    if filter is not None:
+        if filter.get("shop_id"):
+            query = query.where(Shop.shop_identifier == int(filter.get("shop_id")))
     scan = session.execute(query).first()
     if scan is None:
         raise ScanNotFoundError

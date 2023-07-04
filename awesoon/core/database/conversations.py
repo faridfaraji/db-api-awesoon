@@ -37,19 +37,22 @@ def get_conversations(session: Session, filter_args: dict):
     return session.scalars(query).all()
 
 
-def get_conversation_by_id(session: Session, conversation_id: str):
+def get_conversation_by_id(session: Session, conversation_id: str, filter_args: dict = None):
     query = select(
         Conversation
     ).where(
         Conversation.id == conversation_id
     )
+    if filter_args and filter_args["shop_id"]:
+        query = query.join(Shop, Shop.id == Conversation.shop_id)
+        query = query.where(Shop.shop_identifier == filter_args["shop_id"])
     conversation = session.scalars(query).first()
     if conversation is None:
         raise ConversationNotFoundError
     return conversation
 
 
-def get_conversation_messages(session: Session, conversation_id: str):
+def get_conversation_messages(session: Session, conversation_id: str, filter_args: dict = None):
     query = select(
         Message
     ).join(
@@ -57,6 +60,9 @@ def get_conversation_messages(session: Session, conversation_id: str):
     ).where(
         Conversation.id == conversation_id
     )
+    if filter_args and filter_args["shop_id"]:
+        query = query.join(Shop, Shop.id == Conversation.shop_id)
+        query = query.where(Shop.shop_identifier == filter_args["shop_id"])
     return session.scalars(query).all()
 
 

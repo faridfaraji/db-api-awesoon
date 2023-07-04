@@ -134,6 +134,7 @@ class ShopDoc(Resource):
 @api.route("/<id>/closest-doc")
 class ClosestShopDoc(Resource):
     @api.expect(query_doc_model)
+    @api.marshal_with(doc_model)
     def post(self, id):
         with Session() as session:
             try:

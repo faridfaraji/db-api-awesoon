@@ -11,7 +11,7 @@ from awesoon.api.health import api as health_ns
 from awesoon.api.scans import api as scans_ns
 from awesoon.api.shopify import api as shopify_apps_ns
 from awesoon.api.shopify_installations import api as shopify_installations_ns
-from awesoon.api.shops import api as shops_ns
+from awesoon.api.shops_conversation import api as shops_ns
 from awesoon.config import load
 
 config = load(os.environ.get('ENVIRONMENT', 'local'))

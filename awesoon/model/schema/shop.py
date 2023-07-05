@@ -25,7 +25,7 @@ class NegativeKeyWord(Base):
 class Shop(Base):
     __tablename__ = "shops"
     __table_args__ = (
-        CheckConstraint('bot_temperature >= 0 AND bot_temperature <= 1.9', 'chk_bot_temperature_range'),
+        CheckConstraint('bot_temperature >= 0 AND bot_temperature <= 2', 'chk_bot_temperature_range'),
     )
     id = Column(Integer, primary_key=True)
     shop_name = Column(String)

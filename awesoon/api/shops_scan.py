@@ -1,6 +1,5 @@
 
-import marshal
-from flask_restx import Resource
+from flask_restx import Resource, marshal
 from awesoon.api.model.scans import scan
 from awesoon.api.shops import api
 from awesoon.core.database.scans import get_scan_by_id

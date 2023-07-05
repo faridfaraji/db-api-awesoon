@@ -31,6 +31,6 @@ def add_shop_parser(parser):
     parser.add_argument("shop_url", type=str, default=None, location="json")
     parser.add_argument("contact_email", type=str, default=None, location="json")
     parser.add_argument(
-        "bot_temperature", help="Bot temperature must be a float between 0 and 1",
+        "bot_temperature", help="Bot temperature must be a float between 0 and 1.9",
         type=float, default=0, location="json"
     )

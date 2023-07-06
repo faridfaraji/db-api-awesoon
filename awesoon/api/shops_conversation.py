@@ -1,6 +1,7 @@
 from flask_restx import Resource, marshal
 from flask import request
 from awesoon.api.model.conversations import message, conversation
+from awesoon.api.util import add_date_search_params
 from awesoon.api.shops_scan import api
 from awesoon.core.database.conversations import get_conversation_by_id, get_conversation_messages, get_conversations
 from awesoon.core.exceptions import ConversationNotFoundError
@@ -9,6 +10,9 @@ from datetime import datetime, timedelta
 
 conversation_model = api.model("scan", conversation)
 message_model = api.model("message_model", message)
+
+date_parser = api.parser()
+date_paser = add_date_search_params(date_parser)
 
 
 @api.route("/<id>/conversations/<conversation_id>")
@@ -27,9 +31,10 @@ class SingleShopConversation(Resource):
 class ShopConversations(Resource):
     def get(self, id):
         try:
+            args = date_parser.parse_args()
             # Extract the filter dates from the request query parameters
-            start_datetime_str = request.args.get("start_datetime")
-            end_datetime_str = request.args.get("end_datetime")
+            start_datetime_str = args.get("start_datetime")
+            end_datetime_str = args.get("end_datetime")
 
             if start_datetime_str:
                 start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S")

@@ -29,6 +29,7 @@ class SingleShopConversation(Resource):
 
 @api.route("/<id>/conversations")
 class ShopConversations(Resource):
+    @api.expect(get_conversation_parser)
     def get(self, id):
         try:
             args = get_conversation_parser.parse_args()

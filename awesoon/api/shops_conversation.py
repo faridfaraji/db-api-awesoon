@@ -35,7 +35,7 @@ class ShopConversations(Resource):
             args["shop_id"] = int(id)
 
             with Session() as session:
-                conversations = get_conversations(session, filter_args=filter_args)
+                conversations = get_conversations(session, filter_args=args)
                 marshalled_conversation = marshal(conversations, conversation_model)
             return marshalled_conversation, 200
         except ConversationNotFoundError:

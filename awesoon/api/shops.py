@@ -169,7 +169,9 @@ class ShopifyInstallation(Resource):
                 shop = get_shop_with_identifier(session, id)
                 shopify_app = get_shopify_app_with_name(session, data["app_name"])
                 shopify_app_installation = ShopifyAppInstallation(
-                    access_token=data["access_token"], shop_id=shop.id, app_id=shopify_app.app_client_id
+                    access_token=data["access_token"],
+                    shop_id=shop.id,
+                    app_id=shopify_app.app_client_id
                 )
                 session.add(shopify_app_installation)
                 session.commit()

@@ -65,3 +65,9 @@ class ShopifyAppInstallation(Base):
     access_token = Column(String)
     app_id = Column(ForeignKey(ShopifyApp.app_client_id), primary_key=True)
     shop_id = Column(ForeignKey(Shop.id), primary_key=True)
+
+
+class Prompt(Base):
+    __tablename__ = "prompt"
+    id = Column(Integer, primary_key=True)
+    prompt = Column(String)

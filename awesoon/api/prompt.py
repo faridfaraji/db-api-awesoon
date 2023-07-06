@@ -1,7 +1,3 @@
-"""health.py
-
-An indicator to check whether this service is up or down.
-"""
 import logging
 
 from flask_restx import Namespace, Resource, fields, marshal
@@ -28,7 +24,7 @@ prompt_parser.add_argument("prompt", type=str, default=None, location="json")
 
 
 @api.route("")
-class HealthCheck(Resource):
+class PromptTemplate(Resource):
     @api.marshal_with(prompt_model)
     def get(self):
         with Session() as session:

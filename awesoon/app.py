@@ -12,6 +12,7 @@ from awesoon.api.scans import api as scans_ns
 from awesoon.api.shopify import api as shopify_apps_ns
 from awesoon.api.shopify_installations import api as shopify_installations_ns
 from awesoon.api.shops_conversation import api as shops_ns
+from awesoon.api.prompt import api as prompt_ns
 from awesoon.config import load
 
 config = load(os.environ.get('ENVIRONMENT', 'local'))
@@ -38,6 +39,7 @@ def create_app():
     api_v1.add_namespace(shopify_installations_ns)
     api_v1.add_namespace(shopify_installations_ns)
     api_v1.add_namespace(conversations_ns)
+    api_v1.add_namespace(prompt_ns)
     app.register_blueprint(v1_blueprint)
     app.register_blueprint(health_blueprint)
 

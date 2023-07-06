@@ -31,24 +31,8 @@ class SingleShopConversation(Resource):
 class ShopConversations(Resource):
     def get(self, id):
         try:
-            args = date_parser.parse_args()
-            # Extract the filter dates from the request query parameters
-            start_datetime_str = args.get("start_datetime")
-            end_datetime_str = args.get("end_datetime")
-
-            if start_datetime_str:
-                start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S")
-            else:
-                # Set default start datetime as 24 hours ago
-                start_datetime = datetime.now() - timedelta(days=1)
-
-            if end_datetime_str:
-                end_datetime = datetime.strptime(end_datetime_str, "%Y-%m-%d %H:%M:%S")
-            else:
-                # Set default end datetime as current datetime
-                end_datetime = datetime.now()
-
-            filter_args = {"shop_id": int(id), "start_datetime": start_datetime, "end_datetime": end_datetime}
+            args = get_conversation_parser.parse_args()
+            args["shop_id"] = int(id)
 
             with Session() as session:
                 conversations = get_conversations(session, filter_args=filter_args)

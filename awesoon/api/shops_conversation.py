@@ -12,7 +12,7 @@ conversation_model = api.model("scan", conversation)
 message_model = api.model("message_model", message)
 
 date_parser = api.parser()
-date_paser = add_date_search_params(date_parser)
+get_conversation_parser = add_date_search_params(get_conversation_parser)
 
 
 @api.route("/<id>/conversations/<conversation_id>")

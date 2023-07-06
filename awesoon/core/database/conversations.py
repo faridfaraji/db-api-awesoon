@@ -8,41 +8,31 @@ from awesoon.model.schema.shop import Shop
 
 
 def get_conversations_by_shop(session: Session, shop_id: int):
-    query = select(
-        Conversation
-    ).join(
-        Shop, Shop.id == Conversation.shop_id
-    ).where(
-        Shop.shop_identifier == shop_id
-    )
+    query = select(Conversation).join(Shop, Shop.id == Conversation.shop_id).where(Shop.shop_identifier == shop_id)
     return session.scalars(query).all()
 
 
 def get_messages_by_ids(session: Session, message_ids: List[str]) -> List[Message]:
-    query = select(
-        Message
-    ).filter(
-        Message.guid.in_(message_ids)
-    )
+    query = select(Message).filter(Message.guid.in_(message_ids))
     return session.scalars(query).all()
 
 
 def get_conversations(session: Session, filter_args: dict):
-    query = select(
-        Conversation
-    )
+    query = select(Conversation)
     if filter_args["shop_id"]:
         query = query.join(Shop, Shop.id == Conversation.shop_id)
         query = query.where(Shop.shop_identifier == filter_args["shop_id"])
+
+    if filter_args.get("start_datetime") and filter_args.get("end_datetime"):
+        start_datetime = filter_args["start_datetime"]
+        end_datetime = filter_args["end_datetime"]
+        query = query.where(Conversation.timestamp >= start_datetime)
+        query = query.where(Conversation.timestamp <= end_datetime)
     return session.scalars(query).all()
 
 
 def get_conversation_by_id(session: Session, conversation_id: str, filter_args: dict = None):
-    query = select(
-        Conversation
-    ).where(
-        Conversation.id == conversation_id
-    )
+    query = select(Conversation).where(Conversation.id == conversation_id)
     if filter_args and filter_args["shop_id"]:
         query = query.join(Shop, Shop.id == Conversation.shop_id)
         query = query.where(Shop.shop_identifier == filter_args["shop_id"])
@@ -53,12 +43,10 @@ def get_conversation_by_id(session: Session, conversation_id: str, filter_args: 
 
 
 def get_conversation_messages(session: Session, conversation_id: str, filter_args: dict = None):
-    query = select(
-        Message
-    ).join(
-        Conversation, Conversation.id == Message.conversation_id
-    ).where(
-        Conversation.id == conversation_id
+    query = (
+        select(Message)
+        .join(Conversation, Conversation.id == Message.conversation_id)
+        .where(Conversation.id == conversation_id)
     )
     if filter_args and filter_args["shop_id"]:
         query = query.join(Shop, Shop.id == Conversation.shop_id)

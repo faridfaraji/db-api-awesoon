@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask_restx import fields
+from flask_restx import fields, inputs
 
 from awesoon.model.schema.utils import MessageType
 
@@ -12,7 +12,6 @@ class Message(fields.List):
 
 
 class Shop(fields.Integer):
-
     def format(self, value):
         return value.shop_identifier
 
@@ -20,7 +19,7 @@ class Shop(fields.Integer):
 message = {
     "message_type": fields.String(enum=[enum.value for enum in MessageType], required=True),
     "message": fields.String(),
-    "timestamp": fields.DateTime(default=datetime.utcnow())
+    "timestamp": fields.DateTime(default=datetime.utcnow()),
 }
 
 
@@ -30,7 +29,7 @@ conversation = {
     "timestamp": fields.DateTime(required=False, readonly=True),
     "messages": Message(fields.String),
     "ai_message_count": fields.Integer(readonly=True),
-    "user_message_count": fields.Integer(readonly=True)
+    "user_message_count": fields.Integer(readonly=True),
 }
 
 

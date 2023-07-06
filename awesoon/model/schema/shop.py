@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from sqlalchemy import BigInteger, Column, ForeignKey, Integer, String
+from sqlalchemy import BigInteger, CheckConstraint, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from awesoon.model.schema import Base
@@ -24,6 +24,9 @@ class NegativeKeyWord(Base):
 
 class Shop(Base):
     __tablename__ = "shops"
+    __table_args__ = (
+        CheckConstraint('bot_temperature >= 0 AND bot_temperature <= 2', 'chk_bot_temperature_range'),
+    )
     id = Column(Integer, primary_key=True)
     shop_name = Column(String)
     contact_email = Column(String)
@@ -38,6 +41,7 @@ class Shop(Base):
         "Conversation", foreign_keys=[Conversation.shop_id],
         cascade="save-update, merge, delete, delete-orphan",
     )
+    bot_temperature = Column(Float, default=0.0)
 
     @hybrid_property
     def conversations_count(self):

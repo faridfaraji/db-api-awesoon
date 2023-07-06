@@ -51,6 +51,9 @@ shopify_installation_parser.add_argument("access_token", type=str, default=None,
 get_shopify_installation_parser = api.parser()
 get_shopify_installation_parser.add_argument("app_name", type=str, default=None, location="values")
 
+bot_temperature_parser = api.parser()
+bot_temperature_parser.add_argument("bot_temperature", type=float, default=None, location="json")
+
 
 @api.route("")
 class Shops(Resource):
@@ -174,6 +177,25 @@ class ShopifyInstallation(Resource):
                     app_id=shopify_app.app_client_id
                 )
                 session.add(shopify_app_installation)
+                session.commit()
+                return SUCCESS_MESSAGE, 200
+            except sqlalchemy.exc.IntegrityError:
+                api.abort(400, "This installation is not allowed")
+            except Exception as e:
+                print(e, file=sys.stderr)
+                api.abort(500)
+
+
+@api.route("/<id>/bot-temperature")
+class BotTemperature(Resource):
+    @api.expect(bot_temperature_parser)
+    def put(self, id):
+        with Session() as session:
+            try:
+                data = bot_temperature_parser.parse_args()
+                shop = get_shop_with_identifier(session, id)
+                shop.bot_temperature = data["bot_temperature"]
+                session.add(shop)
                 session.commit()
                 return SUCCESS_MESSAGE, 200
             except sqlalchemy.exc.IntegrityError:

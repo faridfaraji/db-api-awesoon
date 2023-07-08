@@ -128,8 +128,10 @@ class ShopDoc(Resource):
     def get(self, id):
         with Session() as session:
             try:
+                docs = []
                 scan = get_latest_scan(session, int(id))
-                docs = get_scan_docs(session, scan[0])
+                if scan:
+                    docs = get_scan_docs(session, scan[0])
                 return marshal(docs, doc_model), 200
             except Exception as e:
                 print(e, file=sys.stderr)

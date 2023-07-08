@@ -1,5 +1,5 @@
 from typing import List
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from sqlalchemy.orm import Session
 from awesoon.core.database.shops import get_shop_with_identifier
 from awesoon.core.exceptions import ConversationNotFoundError
@@ -8,7 +8,12 @@ from awesoon.model.schema.shop import Shop
 
 
 def get_conversations_by_shop(session: Session, shop_id: int):
-    query = select(Conversation).join(Shop, Shop.id == Conversation.shop_id).where(Shop.shop_identifier == shop_id)
+    query = (
+        select(Conversation)
+        .join(Shop, Shop.id == Conversation.shop_id)
+        .where(Shop.shop_identifier == shop_id)
+        .order_by(desc(Conversation.timestamp))
+    )
     return session.scalars(query).all()
 
 
@@ -18,7 +23,10 @@ def get_messages_by_ids(session: Session, message_ids: List[str]) -> List[Messag
 
 
 def get_conversations(session: Session, filter_args: dict):
-    query = select(Conversation)
+    query = (
+        select(Conversation)
+        .order_by(desc(Conversation.timestamp))
+    )
     if filter_args["shop_id"]:
         query = query.join(Shop, Shop.id == Conversation.shop_id)
         query = query.where(Shop.shop_identifier == filter_args["shop_id"])
@@ -47,6 +55,7 @@ def get_conversation_messages(session: Session, conversation_id: str, filter_arg
         select(Message)
         .join(Conversation, Conversation.id == Message.conversation_id)
         .where(Conversation.id == conversation_id)
+        .order_by(desc(Message.timestamp))
     )
     if filter_args and filter_args["shop_id"]:
         query = query.join(Shop, Shop.id == Conversation.shop_id)

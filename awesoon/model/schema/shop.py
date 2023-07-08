@@ -36,7 +36,6 @@ class Shop(Base):
         "ShopNegativeKeyWord",
         foreign_keys=[ShopNegativeKeyWord.shop_id],
     )
-    latest_scan_id = Column(ForeignKey(Scan.guid))
     conversations = relationship(
         "Conversation", foreign_keys=[Conversation.shop_id],
         cascade="save-update, merge, delete, delete-orphan",

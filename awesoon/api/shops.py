@@ -6,7 +6,8 @@ from flask_restx import Namespace, Resource, fields, marshal
 from awesoon.api.model.docs import doc, query_doc
 from awesoon.api.model.shops import add_shop_parser, shop, shopify_installation
 from awesoon.constants import SUCCESS_MESSAGE
-from awesoon.core.database.docs import get_closest_shop_doc, get_shop_docs
+from awesoon.core.database.docs import get_closest_shop_doc, get_scan_docs
+from awesoon.core.database.scans import get_latest_scan
 from awesoon.core.database.shopify import (
     get_all_shopify_app_installations,
     get_shopify_app_with_name,
@@ -127,7 +128,8 @@ class ShopDoc(Resource):
     def get(self, id):
         with Session() as session:
             try:
-                docs = get_shop_docs(session, id)
+                scan = get_latest_scan(session, int(id))
+                docs = get_scan_docs(session, scan[0])
                 return marshal(docs, doc_model), 200
             except Exception as e:
                 print(e, file=sys.stderr)

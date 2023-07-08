@@ -7,7 +7,6 @@ shop = {
     "contact_email": fields.String(required=True),
     "conversations_count": fields.Integer(readonly=True),
     "message_counts": fields.Integer(readonly=True),
-    "latest_scan_id": fields.String(required=True),
     "bot_temperature": fields.Float(required=True, default=0),
 }
 

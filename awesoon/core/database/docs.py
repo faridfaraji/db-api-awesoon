@@ -45,12 +45,12 @@ def add_scan_doc(session: Session, doc: dict, scan_id: str):
     session.add(scan_doc)
 
 
-def get_scan_docs(session: Session, scan_id: str):
+def get_scan_docs(session: Session, scan_guid: str):
     query = (
         select(*DOC_COLUMNS, ScanDoc.guid.label("id"))
         .join(ScanDoc, ScanDoc.doc_id == Doc.id)
         .join(Scan, Scan.guid == ScanDoc.scan_id)
-        .where(Scan.guid == scan_id)
+        .where(Scan.guid == scan_guid)
     )
     result = session.execute(query).all()
     return result
@@ -67,18 +67,6 @@ def update_doc(session: Session, doc: dict, doc_id: str):
     scan_doc.doc_id = doc.id
     session.add(scan_doc)
     return scan_doc
-
-
-def get_shop_docs(session: Session, shop_id: int):
-    query = (
-        select(*DOC_COLUMNS, ScanDoc.guid.label("id"))
-        .join(ScanDoc, ScanDoc.doc_id == Doc.id)
-        .join(Scan, Scan.guid == ScanDoc.scan_id)
-        .join(Shop, Shop.latest_scan_id == Scan.guid)
-        .where(Shop.shop_identifier == shop_id)
-    )
-    result = session.execute(query).all()
-    return result
 
 
 def get_doc_by_id(session: Session, doc_id: str):

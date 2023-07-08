@@ -119,7 +119,6 @@ class ScanDoc(Resource):
         with Session() as session:
             try:
                 docs = get_scan_docs(session, scan_id)
-                session.commit()
                 return marshal(docs, doc_model), 200
             except Exception as e:
                 print(e, file=sys.stderr)

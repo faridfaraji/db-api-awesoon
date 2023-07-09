@@ -4,7 +4,7 @@ import sqlalchemy
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
-from awesoon.core.database.scans import get_scan_object_by_scan_id
+from awesoon.core.database.scans import get_latest_scan, get_scan_object_by_scan_id
 from awesoon.core.exceptions import DocNotFoundError
 from awesoon.model.schema.doc import DEFAULT_DISTANCE_STRATEGY, Doc
 from awesoon.model.schema.scan import Scan, ScanDoc
@@ -18,6 +18,12 @@ def get_closest_shop_doc(
     session: Session, embedding: List[float], shop_id: int, number_of_docs: int = 4
 ):
 
+    scan = get_latest_scan(session, shop_id)
+    latest_scan_id = None
+    if scan:
+        latest_scan_id = scan.guid
+    else:
+        return []
     query = select(
         *DOC_COLUMNS, ScanDoc.guid.label("id"),
         DEFAULT_DISTANCE_STRATEGY(embedding).label("distance")
@@ -27,10 +33,8 @@ def get_closest_shop_doc(
         ScanDoc, ScanDoc.doc_id == Doc.id
     ).join(
         Scan, Scan.guid == ScanDoc.scan_id
-    ).join(
-        Shop, Shop.latest_scan_id == Scan.guid
     ).where(
-        Shop.shop_identifier == shop_id
+        Scan.guid == latest_scan_id
     ).limit(number_of_docs)
 
     return session.execute(query).all()

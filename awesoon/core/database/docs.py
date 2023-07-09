@@ -21,7 +21,7 @@ def get_closest_shop_doc(
     scan = get_latest_scan(session, shop_id)
     latest_scan_id = None
     if scan:
-        latest_scan_id = scan.guid
+        latest_scan_id = scan[0]
     else:
         return []
     query = select(

@@ -2,10 +2,11 @@
 import sys
 
 from flask_restx import Namespace, Resource, marshal
+from flask_restx import fields
 
 from awesoon.api.model.docs import add_docs_parser, doc
 from awesoon.constants import SUCCESS_MESSAGE
-from awesoon.core.database.docs import delete_doc, get_doc_by_id, update_doc
+from awesoon.core.database.docs import  delete_docs, get_doc_by_id, update_doc
 from awesoon.core.exceptions import DocNotFoundError
 from awesoon.model.schema import Session
 from awesoon.model.schema.doc import ADA_TOKEN_COUNT
@@ -16,6 +17,8 @@ doc_parser = api.parser()
 add_docs_parser(doc_parser)
 
 doc_model = api.model("doc", doc)
+id_parser = api.parser()
+id_parser.add_argument("id", type=str, default=[], location="values", action="append")
 
 
 @api.route("/<doc_id>")
@@ -49,10 +52,15 @@ class SingleDoc(Resource):
                 print(e, file=sys.stderr)
                 api.abort(500)
 
-    def delete(self, doc_id):
+
+@api.route("")
+class Doc(Resource):
+    @api.expect(id_parser)
+    def delete(self):
         with Session() as session:
+            ids = id_parser.parse_args()["id"]
             try:
-                delete_doc(session, doc_id)
+                delete_docs(session, ids)
                 session.commit()
                 return SUCCESS_MESSAGE, 200
             except Exception as e:

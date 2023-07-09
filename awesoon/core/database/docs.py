@@ -81,10 +81,10 @@ def get_doc_by_id(session: Session, doc_id: str):
     return doc
 
 
-def delete_doc(session: Session, doc_id: str):
+def delete_docs(session: Session, doc_ids: List[str]):
     query = delete(
         ScanDoc
     ).where(
-        ScanDoc.guid == doc_id
+        ScanDoc.guid.in_(doc_ids)
     )
     session.execute(query)

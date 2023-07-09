@@ -7,7 +7,7 @@ doc = {
     "document": fields.String(),
     "embedding": fields.List(fields.Float, required=False, default=[]),
     "hash": fields.String(),
-    "doc_type": fields.String(enum=[enum.value for enum in DocType], required=True),
+    "doc_type": fields.String(enum=[enum.value for enum in DocType], required=False),
     "doc_identifier": fields.String(),
 }
 

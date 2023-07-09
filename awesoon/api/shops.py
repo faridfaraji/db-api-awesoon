@@ -1,3 +1,4 @@
+import logging
 import sys
 
 import sqlalchemy
@@ -184,6 +185,7 @@ class ShopifyInstallation(Resource):
                 session.commit()
                 return SUCCESS_MESSAGE, 200
             except sqlalchemy.exc.IntegrityError:
+                logging.exception("Integrity Error")
                 api.abort(400, "This installation is not allowed")
             except Exception as e:
                 print(e, file=sys.stderr)

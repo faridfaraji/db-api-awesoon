@@ -34,11 +34,11 @@ def get_scans(session: Session) -> List[List[str]]:
     """
     query = select(
         *SCAN_COLUMNS, Shop.shop_identifier.label("shop_id")
-    ).join(Shop, Shop.id == Scan.shop_id)
+    ).join(Shop, Shop.id == Scan.shop_id).order_by(Scan.timestamp.desc())
     return session.execute(query).all()
 
 
-def get_scans_with_shop_id(session: Session, shop_id: int):
+def get_scans_with_shop_id(session: Session, shop_id: int, limit: int = 100):
     """returns all of the scans for a shop
 
     Args:
@@ -50,7 +50,11 @@ def get_scans_with_shop_id(session: Session, shop_id: int):
     """
     query = select(
         *SCAN_COLUMNS, Shop.shop_identifier.label("shop_id")
-    ).join(Shop, Shop.id == Scan.shop_id).where(Shop.shop_identifier == shop_id)
+    ).join(
+        Shop, Shop.id == Scan.shop_id
+    ).where(
+        Shop.shop_identifier == shop_id
+    ).order_by(Scan.timestamp.desc()).limit(limit)
     return session.execute(query).all()
 
 
@@ -76,6 +80,13 @@ def get_scan_by_id(session: Session, scan_id: int, filter=None):
     return scan
 
 
+def get_latest_scan(session: Session, shop_id: int):
+    scans = get_scans_with_shop_id(session, shop_id, limit=1)
+    if scans:
+        return scans[0]
+    return None
+
+
 def update_scan(session: Session, scan_id: str,  scan_data: dict):
     """updates a scan object
 
@@ -96,13 +107,12 @@ def update_scan(session: Session, scan_id: str,  scan_data: dict):
     session.add(scan)
 
 
-def init_scan_with_docs(session: Session, shop_id: int, scan: Scan):
+def init_scan_with_docs(session: Session, old_scan_guid: int, scan: Scan):
     query = (
         select(Doc)
         .join(ScanDoc, ScanDoc.doc_id == Doc.id)
         .join(Scan, Scan.guid == ScanDoc.scan_id)
-        .join(Shop, Shop.latest_scan_id == Scan.guid)
-        .where(Shop.shop_identifier == shop_id)
+        .where(Scan.guid == old_scan_guid)
     )
     docs = session.scalars(query).all()
     for doc in docs:
@@ -118,12 +128,12 @@ def add_scan(session: Session, scan_data: dict):
     """
     shop_identifier = scan_data.pop("shop_id")
     shop = get_shop_with_identifier(session, shop_identifier)
+    scan_copy = get_latest_scan(session, shop_identifier)
     scan = Scan(**scan_data, shop_id=shop.id)
     session.add(scan)
     session.flush()
-    init_scan_with_docs(session, shop_identifier, scan)
-    shop.latest_scan_id = scan.guid
-    session.add(shop)
+    if scan_copy:
+        init_scan_with_docs(session, scan_copy[0], scan)
     return scan
 
 

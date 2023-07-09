@@ -123,7 +123,7 @@ class SingleNegativeKeyWord(Resource):
 
 @api.route("/<id>/docs")
 class ShopDoc(Resource):
-    @api.marshal_with(doc_model)
+    @api.marshal_list_with(doc_model)
     def get(self, id):
         with Session() as session:
             try:

@@ -114,7 +114,7 @@ class ScanStatus(Resource):
 
 @api.route("/<scan_id>/docs")
 class ScanDoc(Resource):
-    @api.marshal_with(doc_model)
+    @api.marshal_list_with(doc_model)
     def get(self, scan_id):
         with Session() as session:
             try:
@@ -125,18 +125,20 @@ class ScanDoc(Resource):
                 print(e, file=sys.stderr)
                 api.abort(500)
 
-    @api.expect(doc_model)
+    @api.expect([doc_model], validate=True)
     def post(self, scan_id):
-        with Session() as session:
-            try:
-                doc_data = doc_parser.parse_args()
-                embedding = doc_data["embedding"]
-                if len(embedding) != ADA_TOKEN_COUNT:
-                    api.abort(400, f"Wrong embedding dimension, should be length {ADA_TOKEN_COUNT}")
-                add_scan_doc(session, doc_data, scan_id)
+        try:
+            with Session() as session:
+                docs_data = api.payload
+                for doc_data in docs_data:
+                    embedding = doc_data["embedding"]
+                    if len(embedding) != ADA_TOKEN_COUNT:
+                        api.abort(400, f"Wrong embedding dimension, should be length {ADA_TOKEN_COUNT}")
+                for doc_data in docs_data:
+                    add_scan_doc(session, doc_data, scan_id)
                 session.commit()
-                return SUCCESS_MESSAGE, 200
-            except Exception as e:
-                print(e, file=sys.stderr)
-                api.abort(500)
+        except Exception as e:
+            print(e, file=sys.stderr)
+            api.abort(500)
+        return SUCCESS_MESSAGE, 200
 

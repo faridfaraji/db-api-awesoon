@@ -13,6 +13,7 @@ dependencies:
         - sqlalchemy<2.0.4
         - pytest
         - python=3.9
+        - redis-py
         - werkzeug=2.1.2
         - pip:
                 - config-probe

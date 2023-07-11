@@ -79,3 +79,19 @@ def add_conversation(session: Session, conversation_data: dict):
     conversation.messages = get_messages_by_ids(session, message_ids)
     session.add(conversation)
     return conversation
+
+
+def get_shop_messages(session: Session, shop_id: str, filter_args: dict = None):
+    query = (
+        select(Message)
+        .join(Conversation, Conversation.id == Message.conversation_id)
+        .join(Shop, Shop.id == Conversation.shop_id)
+        .where(Shop.shop_identifier == shop_id)
+        .order_by(desc(Message.timestamp))
+    )
+    if filter_args.get("start_datetime") and filter_args.get("end_datetime"):
+        start_datetime = filter_args["start_datetime"]
+        end_datetime = filter_args["end_datetime"]
+        query = query.where(Message.timestamp >= start_datetime)
+        query = query.where(Message.timestamp <= end_datetime)
+    return session.scalars(query).all()

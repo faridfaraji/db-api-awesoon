@@ -4,13 +4,6 @@ from flask_restx import fields, inputs
 from awesoon.model.schema.utils import MessageType
 
 
-class Message(fields.List):
-    __default__ = []
-
-    def format(self, values):
-        return [v.guid for v in values]
-
-
 class Shop(fields.Integer):
     def format(self, value):
         return value.shop_identifier
@@ -27,7 +20,6 @@ conversation = {
     "id": fields.String(readonly=True),
     "shop_id": Shop(attribute="shop"),
     "timestamp": fields.DateTime(required=False, readonly=True),
-    "messages": Message(fields.String),
     "ai_message_count": fields.Integer(readonly=True),
     "user_message_count": fields.Integer(readonly=True),
 }

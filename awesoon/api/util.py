@@ -1,22 +1,23 @@
-from flask_restx import inputs
-from datetime import datetime, timedelta
+from functools import wraps
+from flask import request
+from awesoon.core.cache import RedisClusterJson
 
 
-def add_date_search_params(parser):
-    parser.add_argument(
-        "start_datetime",
-        type=inputs.datetime_from_iso8601,
-        default=(datetime.utcnow()-timedelta(days=1)).isoformat(),
-        required=False,
-        help="Start date for filtering requested conversations",
-        location="values",
-    )
-    parser.add_argument(
-        "end_datetime",
-        type=inputs.datetime_from_iso8601,
-        required=False,
-        default=datetime.utcnow().isoformat(),
-        help="End date for filtering requested conversations",
-        location="values",
-    )
-    return parser
+redis_cluster = RedisClusterJson()
+
+
+def cached(func):
+    """Cache endpoints"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if request.method == "GET" and request.args:
+            if request.url in redis_cluster:
+                return redis_cluster.get(request.url), 200
+            else:
+                result, status = func(*args, **kwargs)
+                if status == 200:
+                    redis_cluster[request.url] = result
+                return result, status
+        else:
+            return func(*args, **kwargs)
+    return wrapper

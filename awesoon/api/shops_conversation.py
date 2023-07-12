@@ -1,6 +1,6 @@
 from flask_restx import Resource, marshal
 from flask import request
-from awesoon.api.model.conversations import message, conversation
+from awesoon.api.model.conversations import message, get_conversation_model, summary
 from awesoon.api.model.util import add_date_search_params
 from awesoon.api.shops_scan import api
 from awesoon.api.util import cached
@@ -9,8 +9,8 @@ from awesoon.core.database.shops import get_shop_with_identifier
 from awesoon.core.exceptions import ConversationNotFoundError, ShopNotFoundError
 from awesoon.model.schema import Session
 
-
-conversation_model = api.model("conversation", conversation)
+conversation_summary_model = api.model("conversation_summary_model", summary)
+conversation_model = api.model("conversation", get_conversation_model(conversation_summary_model))
 message_model = api.model("message_model", message)
 
 get_conversation_parser = api.parser()

@@ -2,7 +2,7 @@ import logging
 import sys
 
 import sqlalchemy
-from flask_restx import Namespace, Resource, fields, marshal
+from flask_restx import Namespace, Resource, marshal
 
 from awesoon.api.model.docs import doc, query_doc
 from awesoon.api.model.shops import add_shop_parser, shop, shopify_installation

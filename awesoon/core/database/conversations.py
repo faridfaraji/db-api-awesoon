@@ -101,7 +101,7 @@ def get_conversation_summary(session: Session, conversation_id: str, filter_args
         .join(Conversation, Conversation.conversation_summary_id == ConversationSummary.id)
         .where(Conversation.conversation_summary_id == conversation_id)
     )
-    return session.scalars(query).all()
+    return session.scalars(query).first()
 
 
 def upsert_conversation_summary(session: Session, conversation_id: str, conversation_summary_data: dict):

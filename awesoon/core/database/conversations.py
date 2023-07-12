@@ -99,7 +99,7 @@ def get_conversation_summary(session: Session, conversation_id: str, filter_args
     query = (
         select(ConversationSummary)
         .join(Conversation, Conversation.conversation_summary_id == ConversationSummary.id)
-        .where(Conversation.conversation_summary_id == conversation_id)
+        .where(Conversation.id == conversation_id)
     )
     return session.scalars(query).first()
 

@@ -19,6 +19,15 @@ class Message(Base):
     conversation_id = Column(ForeignKey("conversation_threads.id"))
 
 
+class ConversationSummary(Base):
+    __tablename__ = "conversations_ai_summary"
+    id = Column(String, default=lambda: str(uuid4()), index=True, primary_key=True)
+    title = Column(String)
+    classifications = Column(String)
+    summary = Column(String)
+    conversation = relationship("Conversation", back_populates="conversation_summary", uselist=False)
+
+
 class Conversation(Base):
     __tablename__ = "conversation_threads"
     id = Column(String, default=lambda: str(uuid4()), index=True, primary_key=True)
@@ -30,6 +39,12 @@ class Conversation(Base):
     )
     shop = relationship(
         "Shop", foreign_keys=[shop_id]
+    )
+    conversation_summary_id = Column(ForeignKey("conversations_ai_summary.id"))
+    conversation_summary = relationship(
+        "ConversationSummary", back_populates="conversation",
+        foreign_keys=[conversation_summary_id], uselist=False,
+        cascade="all, delete",
     )
 
     @hybrid_property

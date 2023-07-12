@@ -92,12 +92,12 @@ class ConversationMessages(Resource):
 
 @api.route("/<conversation_id>/summary")
 class ConversationSummary(Resource):
-    @api.marshal_list_with(summary_model)
+    @api.marshal_with(summary_model)
     def get(self, conversation_id):
         try:
             with Session() as session:
                 conversation_summary = get_conversation_summary(session, conversation_id)
-                return marshal(conversation_summary, summary_model), 200
+                return conversation_summary, 200
         except ConversationNotFoundError:
             api.abort(400, "Shop not found")
 

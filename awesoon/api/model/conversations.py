@@ -20,6 +20,7 @@ summary = {
     "title": fields.String(required=True),
     "classifications": fields.String(required=True),
     "summary": fields.String(required=True),
+    "satisfaction": fields.String(required=True)
 }
 
 
@@ -56,4 +57,5 @@ def add_conversation_summary_parser(parser):
     parser.add_argument("title", type=str, default=None, location="json")
     parser.add_argument("classifications", type=str, default=None, location="json")
     parser.add_argument("summary", type=str, default=None, location="json")
+    parser.add_argument("satisfaction", type=str, default=None, location="json")
     return parser

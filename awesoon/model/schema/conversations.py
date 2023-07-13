@@ -26,6 +26,7 @@ class ConversationSummary(Base):
     classifications = Column(String)
     summary = Column(String)
     conversation = relationship("Conversation", back_populates="conversation_summary", uselist=False)
+    satisfaction = Column(String)
 
 
 class Conversation(Base):

@@ -1,10 +1,16 @@
 # Project configuration
-PROJECT_NAME = awesoon-db-api
+PROJECT_NAME = db-api
 
 # General Parameters
 TOPDIR = $(shell git rev-parse --show-toplevel)
 CONDA_SH := $(shell find ~/*conda*/etc -name conda.sh | tail -1)
 ACTIVATE := source $(CONDA_SH) && conda activate $(PROJECT_NAME)
+ifeq ($(shell uname -p), arm)
+DOCKER_PLATFORM = --platform linux/amd64
+else
+DOCKER_PLATFORM =
+endif
+
 
 default: help
 
@@ -20,7 +26,13 @@ run: ## Start the service locally
 	flask run --no-debugger --host=0.0.0.0 --no-reload -p $(PORT)
 
 build-docker: ## Build the docker image
-	@docker-compose -f deploy/docker_compose/docker-compose.dev.yml build
+	docker build $(DOCKER_PLATFORM) -t $(PROJECT_NAME) .
+
+tag-docker: ## Tag the docker image
+	docker tag $(PROJECT_NAME) northamerica-northeast1-docker.pkg.dev/iron-burner-389219/awesoon/$(PROJECT_NAME):latest
+
+push-docker: ## push the image to registry
+	docker push northamerica-northeast1-docker.pkg.dev/iron-burner-389219/awesoon/$(PROJECT_NAME):latest
 
 run-docker: ## Run the docker image
 	@docker-compose -f deploy/docker_compose/docker-compose.dev.yml up

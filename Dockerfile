@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3 as base
+FROM condaforge/mambaforge as base
 
 
 # Directory Creation
@@ -11,9 +11,9 @@ WORKDIR $APP_ROOT
 FROM base as requirements
 COPY ./environment.yml $APP_ROOT/
 
-RUN conda env create --quiet --force environment.yml
-RUN conda clean --quiet --all --yes
-SHELL ["conda", "run", "-n", "db-api", "/bin/bash", "-c"]
+RUN mamba env create --quiet --force environment.yml
+RUN mamba clean --quiet --all --yes
+SHELL ["mamba", "run", "-n", "db-api", "/bin/bash", "-c"]
 
 FROM requirements as container
 COPY . .

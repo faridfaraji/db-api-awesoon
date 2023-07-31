@@ -1,0 +1,3 @@
+redis_cluster:
+  url: "localhost"
+  port: "6379"

@@ -16,8 +16,8 @@ dependencies:
         - redis-py
         - werkzeug=2.1.2
         - pip:
-                - config-probe
                 - pytest-cov
                 - pgvector
                 - tox-conda
+                - git+https://github.com/korbit-ai/python-config-probe.git
 

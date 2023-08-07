@@ -14,7 +14,7 @@ class RedisCluster:
     def __init__(self) -> None:
         self._cache = get_redis_client()
         self.namespace = f"{hostname}-{ENV}"
-        self.TIMEOUT_SECONDS = 7200  # 2 hours
+        self.TIMEOUT_SECONDS = 180  # 3 mins
 
     def __setitem__(self, key, value):
         self._cache.set(self.get_namespaced_key(key), value, ex=self.TIMEOUT_SECONDS)

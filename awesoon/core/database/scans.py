@@ -109,14 +109,15 @@ def update_scan(session: Session, scan_id: str,  scan_data: dict):
 
 def init_scan_with_docs(session: Session, old_scan_guid: int, scan: Scan):
     query = (
-        select(Doc)
+        select(Doc.id)
         .join(ScanDoc, ScanDoc.doc_id == Doc.id)
         .join(Scan, Scan.guid == ScanDoc.scan_id)
         .where(Scan.guid == old_scan_guid)
     )
-    docs = session.scalars(query).all()
-    for doc in docs:
-        session.add(ScanDoc(scan_id=scan.guid, doc_id=doc.id))
+    docs_id = session.scalars(query).all()
+    for doc_id in docs_id:
+        session.add(ScanDoc(scan_id=scan.guid, doc_id=doc_id))
+    session.flush()
 
 
 def add_scan(session: Session, scan_data: dict):

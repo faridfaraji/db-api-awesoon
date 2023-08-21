@@ -117,6 +117,7 @@ def init_scan_with_docs(session: Session, old_scan_guid: int, scan: Scan):
     docs = session.scalars(query).all()
     for doc in docs:
         session.add(ScanDoc(scan_id=scan.guid, doc_id=doc.id))
+    session.flush()
 
 
 def add_scan(session: Session, scan_data: dict):

@@ -28,7 +28,7 @@ def add_paginator(parser):
         type=int,
         default=0,
         required=False,
-        help="Start date for filtering requested conversations",
+        help="page number",
         location="values",
     )
     parser.add_argument(
@@ -36,7 +36,7 @@ def add_paginator(parser):
         type=int,
         required=False,
         default=1000,
-        help="End date for filtering requested conversations",
+        help="limit number of results",
         location="values",
     )
     return parser

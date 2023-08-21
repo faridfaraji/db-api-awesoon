@@ -119,6 +119,7 @@ class ScanStatus(Resource):
 @api.route("/<scan_id>/docs")
 class ScanDoc(Resource):
     @api.marshal_list_with(doc_model)
+    @api.expect(get_docs_parser)
     def get(self, scan_id):
         with Session() as session:
             try:

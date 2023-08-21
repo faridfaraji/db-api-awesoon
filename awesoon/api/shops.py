@@ -130,6 +130,7 @@ class SingleNegativeKeyWord(Resource):
 @api.route("/<id>/docs")
 class ShopDoc(Resource):
     @api.marshal_list_with(doc_model)
+    @api.expect(get_docs_parser)
     def get(self, id):
         with Session() as session:
             try:

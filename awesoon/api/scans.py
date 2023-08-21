@@ -5,6 +5,7 @@ from flask_restx import Namespace, Resource, marshal
 
 from awesoon.api.model.docs import add_docs_parser, doc
 from awesoon.api.model.scans import scan, scan_status
+from awesoon.api.model.util import add_paginator
 from awesoon.constants import SUCCESS_MESSAGE
 from awesoon.core.database.docs import add_scan_doc, get_scan_docs
 from awesoon.core.database.scans import (
@@ -36,6 +37,9 @@ scan_parser.add_argument("shop_id", type=int, default=None, location="json")
 
 doc_parser = api.parser()
 doc_parser = add_docs_parser(doc_parser)
+
+get_docs_parser = api.parser()
+get_docs_parser = add_paginator(get_docs_parser)
 
 
 @api.route("/<scan_id>")
@@ -118,7 +122,10 @@ class ScanDoc(Resource):
     def get(self, scan_id):
         with Session() as session:
             try:
-                docs = get_scan_docs(session, scan_id)
+                get_docs_params = get_docs_parser.parse_args()
+                offset = get_docs_params["offset"]
+                limit = get_docs_params["limit"]
+                docs = get_scan_docs(session, scan_id, offset=offset, limit=limit)
                 return marshal(docs, doc_model), 200
             except Exception as e:
                 print(e, file=sys.stderr)

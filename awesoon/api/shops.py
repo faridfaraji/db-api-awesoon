@@ -6,6 +6,7 @@ from flask_restx import Namespace, Resource, marshal
 
 from awesoon.api.model.docs import doc, query_doc
 from awesoon.api.model.shops import add_shop_parser, shop, shopify_installation
+from awesoon.api.model.util import add_paginator
 from awesoon.constants import SUCCESS_MESSAGE
 from awesoon.core.database.docs import get_closest_shop_doc, get_scan_docs
 from awesoon.core.database.scans import get_latest_scan
@@ -55,6 +56,9 @@ get_shopify_installation_parser.add_argument("app_name", type=str, default=None,
 
 bot_temperature_parser = api.parser()
 bot_temperature_parser.add_argument("bot_temperature", type=float, default=None, location="json")
+
+get_docs_parser = api.parser()
+get_docs_parser = add_paginator(get_docs_parser)
 
 
 @api.route("")
@@ -129,10 +133,13 @@ class ShopDoc(Resource):
     def get(self, id):
         with Session() as session:
             try:
+                get_docs_params = get_docs_parser.parse_args()
+                offset = get_docs_params["offset"]
+                limit = get_docs_params["limit"]
                 docs = []
                 scan = get_latest_scan(session, int(id))
                 if scan:
-                    docs = get_scan_docs(session, scan[0])
+                    docs = get_scan_docs(session, scan[0], offset=offset, limit=limit)
                 return marshal(docs, doc_model), 200
             except Exception as e:
                 print(e, file=sys.stderr)

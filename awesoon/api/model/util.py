@@ -20,3 +20,23 @@ def add_date_search_params(parser):
         location="values",
     )
     return parser
+
+
+def add_paginator(parser):
+    parser.add_argument(
+        "offset",
+        type=int,
+        default=0,
+        required=False,
+        help="Start date for filtering requested conversations",
+        location="values",
+    )
+    parser.add_argument(
+        "limit",
+        type=int,
+        required=False,
+        default=1000,
+        help="End date for filtering requested conversations",
+        location="values",
+    )
+    return parser

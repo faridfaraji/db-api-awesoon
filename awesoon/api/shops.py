@@ -132,7 +132,7 @@ class ShopDoc(Resource):
     @api.marshal_list_with(doc_model)
     @api.expect(get_docs_parser)
     def get(self, id):
-        with Session() as session:
+        with Session(autoflush=False, expire_on_commit=False) as session:
             try:
                 get_docs_params = get_docs_parser.parse_args()
                 offset = get_docs_params["offset"]

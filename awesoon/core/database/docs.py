@@ -49,13 +49,14 @@ def add_scan_doc(session: Session, doc: dict, scan_id: str):
     session.add(scan_doc)
 
 
-def get_scan_docs(session: Session, scan_guid: str):
+def get_scan_docs(session: Session, scan_guid: str, offset: int = 0, limit: int = 1000):
     query = (
         select(*DOC_COLUMNS, ScanDoc.guid.label("id"))
         .join(ScanDoc, ScanDoc.doc_id == Doc.id)
         .join(Scan, Scan.guid == ScanDoc.scan_id)
         .where(Scan.guid == scan_guid)
     )
+    query = query.offset(offset * limit).limit(limit)
     result = session.execute(query).all()
     return result
 

@@ -141,6 +141,7 @@ class ShopDoc(Resource):
                 scan = get_latest_scan(session, int(id))
                 if scan:
                     docs = get_scan_docs(session, scan[0], offset=offset, limit=limit)
+                session.close()
                 return marshal(docs, doc_model), 200
             except Exception as e:
                 print(e, file=sys.stderr)

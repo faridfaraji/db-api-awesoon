@@ -127,6 +127,7 @@ class ScanDoc(Resource):
                 offset = get_docs_params["offset"]
                 limit = get_docs_params["limit"]
                 docs = get_scan_docs(session, scan_id, offset=offset, limit=limit)
+                session.close()
                 return marshal(docs, doc_model), 200
             except Exception as e:
                 print(e, file=sys.stderr)

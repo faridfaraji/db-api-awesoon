@@ -3,7 +3,6 @@ from flask import request
 from awesoon.api.model.conversations import message, get_conversation_model, summary
 from awesoon.api.model.util import add_date_search_params
 from awesoon.api.shops_scan import api
-from awesoon.api.util import cached
 from awesoon.core.database.conversations import get_conversation_by_id, get_conversation_messages, get_conversations, get_shop_messages
 from awesoon.core.database.shops import get_shop_with_identifier
 from awesoon.core.exceptions import ConversationNotFoundError, ShopNotFoundError
@@ -22,7 +21,6 @@ add_date_search_params(get_messages_parser)
 
 @api.route("/<id>/conversations/<conversation_id>")
 class SingleShopConversation(Resource):
-    @cached
     def get(self, id, conversation_id):
         try:
             with Session() as session:
@@ -36,7 +34,6 @@ class SingleShopConversation(Resource):
 @api.route("/<id>/conversations")
 class ShopConversations(Resource):
     @api.expect(get_conversation_parser)
-    @cached
     def get(self, id):
         try:
             add_date_search_params(get_conversation_parser)
@@ -72,7 +69,6 @@ class ConversationMessages(Resource):
 class ShopMessages(Resource):
     @api.marshal_list_with(message_model)
     @api.expect(get_messages_parser)
-    @cached
     def get(self, id):
         try:
             add_date_search_params(get_messages_parser)

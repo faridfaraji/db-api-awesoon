@@ -73,7 +73,7 @@ class ConversationMessages(Resource):
                 messages = get_conversation_messages(session, conversation_id)
                 return messages, 200
         except ConversationNotFoundError:
-            api.abort(400, "Shop not found")
+            api.abort(400, "Conversation Not Found")
 
     @api.expect(message_model, validate=True)
     def post(self, conversation_id):

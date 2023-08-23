@@ -51,6 +51,7 @@ def get_conversation_by_id(session: Session, conversation_id: str, filter_args: 
 
 
 def get_conversation_messages(session: Session, conversation_id: str, filter_args: dict = None):
+    get_conversation_by_id(session, conversation_id)
     query = (
         select(Message)
         .join(Conversation, Conversation.id == Message.conversation_id)

@@ -13,6 +13,7 @@ message = {
     "message_type": fields.String(enum=[enum.value for enum in MessageType], required=True),
     "message": fields.String(),
     "timestamp": fields.DateTime(default=datetime.utcnow()),
+    "metadata": fields.List(fields.String, required=False, default=[], attribute="message_metadata")
 }
 
 
@@ -45,6 +46,7 @@ def add_message_parser(parser):
     parser.add_argument("message_type", type=str, default=None, location="json")
     parser.add_argument("message", type=str, default=None, location="json")
     parser.add_argument("timestamp", type=str, default=None, location="json")
+    parser.add_argument("metadata", type=list, default=[], location="json", dest="message_metadata")
     return parser
 
 

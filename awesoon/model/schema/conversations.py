@@ -1,5 +1,5 @@
 from uuid import uuid4
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func, Enum
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func, Enum, ARRAY
 from awesoon.model.schema import Base
 from awesoon.model.schema.utils import MessageType
 from sqlalchemy.orm import relationship
@@ -17,6 +17,7 @@ class Message(Base):
     token_count = Column(Integer)
     timestamp = Column(DateTime, default=func.now())
     conversation_id = Column(ForeignKey("conversation_threads.id"))
+    message_metadata = Column(ARRAY(String), nullable=True)
 
 
 class ConversationSummary(Base):

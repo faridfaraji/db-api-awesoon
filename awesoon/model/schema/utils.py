@@ -6,6 +6,8 @@ class DocType(enum.Enum):
     CATEGORY = "CATEGORY"
     ORDER = "ORDER"
     POLICY = "POLICY"
+    PAGE = "PAGE"
+    BLOG = "BLOG"
 
 
 class ScanStatus(enum.Enum):

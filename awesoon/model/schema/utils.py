@@ -7,7 +7,7 @@ class DocType(enum.Enum):
     ORDER = "ORDER"
     POLICY = "POLICY"
     PAGE = "PAGE"
-    BLOG = "BLOG"
+    ARTICLE = "ARTICLE"
 
 
 class ScanStatus(enum.Enum):

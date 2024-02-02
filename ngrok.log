@@ -1,0 +1,133 @@
+t=2023-06-08T01:11:12-0400 lvl=info msg="no configuration paths supplied"
+t=2023-06-08T01:11:12-0400 lvl=info msg="using configuration at default config path" path="/Users/farid/Library/Application Support/ngrok/ngrok.yml"
+t=2023-06-08T01:11:12-0400 lvl=info msg="open config file" path="/Users/farid/Library/Application Support/ngrok/ngrok.yml" err=nil
+t=2023-06-08T01:11:12-0400 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
+t=2023-06-08T01:11:12-0400 lvl=info msg="client session established" obj=tunnels.session obj=csess id=b92a32078873
+t=2023-06-08T01:11:12-0400 lvl=info msg="tunnel session started" obj=tunnels.session
+t=2023-06-08T01:11:12-0400 lvl=info msg="started tunnel" obj=tunnels name=command_line addr=http://localhost:8000 url=https://3723-2607-fa49-d945-5300-7c48-9181-4414-4fef.ngrok-free.app
+t=2023-06-08T01:11:12-0400 lvl=info msg="update available" obj=updater
+t=2023-06-08T01:11:34-0400 lvl=info msg=start pg=/ id=658f586d97d1a7fc
+t=2023-06-08T01:11:34-0400 lvl=info msg=end pg=/ id=658f586d97d1a7fc status=302 dur=103.625µs
+t=2023-06-08T01:11:34-0400 lvl=info msg=start pg=/inspect/http id=0d8d4bbe2532e8f4
+t=2023-06-08T01:11:34-0400 lvl=info msg=end pg=/inspect/http id=0d8d4bbe2532e8f4 status=200 dur=327.542µs
+t=2023-06-08T01:11:34-0400 lvl=info msg=start pg=/static/js/vendor.29109f3a578dc3b2a02b.js id=a3ad27ad1839b6bb
+t=2023-06-08T01:11:34-0400 lvl=info msg=start pg=/static/css/app.fe878db551fb56227c48.css id=a20d6fc2ca7a131e
+t=2023-06-08T01:11:34-0400 lvl=info msg=start pg=/static/js/rpx.995b4951c0fd6b1fa875.js id=42e9cd64dd08d371
+t=2023-06-08T01:11:34-0400 lvl=info msg=end pg=/static/js/rpx.995b4951c0fd6b1fa875.js id=42e9cd64dd08d371 status=200 dur=7.272041ms
+t=2023-06-08T01:11:34-0400 lvl=info msg=end pg=/static/css/app.fe878db551fb56227c48.css id=a20d6fc2ca7a131e status=200 dur=7.749541ms
+t=2023-06-08T01:11:34-0400 lvl=info msg=end pg=/static/js/vendor.29109f3a578dc3b2a02b.js id=a3ad27ad1839b6bb status=200 dur=22.016625ms
+t=2023-06-08T01:11:34-0400 lvl=info msg=start pg=/static/js/app.de0db28a880159d23688.js id=f807b884186d1332
+t=2023-06-08T01:11:34-0400 lvl=info msg=end pg=/static/js/app.de0db28a880159d23688.js id=f807b884186d1332 status=200 dur=2.194875ms
+t=2023-06-08T01:11:34-0400 lvl=info msg=start pg=/grpc/agent.Web/Preloaded id=99b718c06389fd57
+t=2023-06-08T01:11:34-0400 lvl=info msg=start pg=/grpc/agent.Web/State id=18dcd987a8f75af0
+t=2023-06-08T01:11:34-0400 lvl=info msg=end pg=/grpc/agent.Web/Preloaded id=99b718c06389fd57 status=200 dur=1.074125ms
+t=2023-06-08T01:11:36-0400 lvl=info msg=end pg=/grpc/agent.Web/State id=18dcd987a8f75af0 status=200 dur=1.561163333s
+t=2023-06-08T01:11:38-0400 lvl=info msg=start pg=/ id=3c2ce41698fa19d5
+t=2023-06-08T01:11:38-0400 lvl=info msg=end pg=/ id=3c2ce41698fa19d5 status=302 dur=105.083µs
+t=2023-06-08T01:11:38-0400 lvl=info msg=start pg=/inspect/http id=4500b72dde5a34c8
+t=2023-06-08T01:11:38-0400 lvl=info msg=end pg=/inspect/http id=4500b72dde5a34c8 status=200 dur=128.375µs
+t=2023-06-08T01:11:38-0400 lvl=info msg=start pg=/static/css/app.fe878db551fb56227c48.css id=eff1e987bb9447c2
+t=2023-06-08T01:11:38-0400 lvl=info msg=start pg=/static/js/vendor.29109f3a578dc3b2a02b.js id=3a3acec1ce331050
+t=2023-06-08T01:11:38-0400 lvl=info msg=start pg=/static/js/rpx.995b4951c0fd6b1fa875.js id=a88a3b545de99d96
+t=2023-06-08T01:11:38-0400 lvl=info msg=end pg=/static/js/rpx.995b4951c0fd6b1fa875.js id=a88a3b545de99d96 status=304 dur=315.125µs
+t=2023-06-08T01:11:38-0400 lvl=info msg=end pg=/static/css/app.fe878db551fb56227c48.css id=eff1e987bb9447c2 status=304 dur=980.791µs
+t=2023-06-08T01:11:38-0400 lvl=info msg=end pg=/static/js/vendor.29109f3a578dc3b2a02b.js id=3a3acec1ce331050 status=304 dur=12.783667ms
+t=2023-06-08T01:11:38-0400 lvl=info msg=start pg=/static/js/app.de0db28a880159d23688.js id=81091c8d0c2906b4
+t=2023-06-08T01:11:38-0400 lvl=info msg=end pg=/static/js/app.de0db28a880159d23688.js id=81091c8d0c2906b4 status=304 dur=4.236375ms
+t=2023-06-08T01:11:38-0400 lvl=info msg=start pg=/grpc/agent.Web/Preloaded id=c5056d6cbcd194d3
+t=2023-06-08T01:11:38-0400 lvl=info msg=start pg=/grpc/agent.Web/State id=561bf7adde54140b
+t=2023-06-08T01:11:38-0400 lvl=info msg=end pg=/grpc/agent.Web/Preloaded id=c5056d6cbcd194d3 status=200 dur=393.667µs
+t=2023-06-08T01:11:42-0400 lvl=info msg=start pg=/inspect/http id=14e7182d1a3d71ec
+t=2023-06-08T01:11:42-0400 lvl=info msg=end pg=/inspect/http id=14e7182d1a3d71ec status=200 dur=380.167µs
+t=2023-06-08T01:11:42-0400 lvl=info msg=start pg=/static/css/app.fe878db551fb56227c48.css id=2d0b17e36b9d878e
+t=2023-06-08T01:11:42-0400 lvl=info msg=end pg=/static/css/app.fe878db551fb56227c48.css id=2d0b17e36b9d878e status=304 dur=877.083µs
+t=2023-06-08T01:11:42-0400 lvl=info msg=start pg=/static/js/vendor.29109f3a578dc3b2a02b.js id=1da75f978d7c9e39
+t=2023-06-08T01:11:42-0400 lvl=info msg=start pg=/static/js/rpx.995b4951c0fd6b1fa875.js id=7ebaf569e7f10fe8
+t=2023-06-08T01:11:42-0400 lvl=info msg=start pg=/static/js/app.de0db28a880159d23688.js id=5cc072166f6cbbec
+t=2023-06-08T01:11:42-0400 lvl=info msg=end pg=/static/js/rpx.995b4951c0fd6b1fa875.js id=7ebaf569e7f10fe8 status=304 dur=277.292µs
+t=2023-06-08T01:11:42-0400 lvl=info msg=end pg=/static/js/app.de0db28a880159d23688.js id=5cc072166f6cbbec status=304 dur=668.833µs
+t=2023-06-08T01:11:42-0400 lvl=info msg=end pg=/static/js/vendor.29109f3a578dc3b2a02b.js id=1da75f978d7c9e39 status=304 dur=16.824ms
+t=2023-06-08T01:11:42-0400 lvl=info msg=start pg=/grpc/agent.Web/Preloaded id=f206d74c87117e69
+t=2023-06-08T01:11:42-0400 lvl=info msg=start pg=/grpc/agent.Web/State id=8c3d8c4c20e66326
+t=2023-06-08T01:11:42-0400 lvl=info msg=end pg=/grpc/agent.Web/Preloaded id=f206d74c87117e69 status=200 dur=746.792µs
+t=2023-06-08T01:11:42-0400 lvl=info msg=start pg=/static/favicon.ico id=cf82bd2254ae0650
+t=2023-06-08T01:11:42-0400 lvl=info msg=end pg=/static/favicon.ico id=cf82bd2254ae0650 status=200 dur=155.417µs
+t=2023-06-08T01:11:43-0400 lvl=info msg=end pg=/grpc/agent.Web/State id=561bf7adde54140b status=200 dur=4.710721833s
+t=2023-06-08T01:11:43-0400 lvl=info msg=start pg=/inspect/http id=29be442841cea180
+t=2023-06-08T01:11:43-0400 lvl=info msg=end pg=/inspect/http id=29be442841cea180 status=200 dur=231.833µs
+t=2023-06-08T01:11:43-0400 lvl=info msg=start pg=/grpc/agent.Web/Preloaded id=372d2319af333af4
+t=2023-06-08T01:11:43-0400 lvl=info msg=start pg=/grpc/agent.Web/State id=d91b7c4fd4e0a572
+t=2023-06-08T01:11:43-0400 lvl=info msg=end pg=/grpc/agent.Web/Preloaded id=372d2319af333af4 status=200 dur=308.291µs
+t=2023-06-08T01:11:43-0400 lvl=info msg=start pg=/inspect/http id=13812e2a931bbc25
+t=2023-06-08T01:11:43-0400 lvl=info msg=end pg=/inspect/http id=13812e2a931bbc25 status=200 dur=125.5µs
+t=2023-06-08T01:11:43-0400 lvl=info msg=start pg=/grpc/agent.Web/Preloaded id=472717f90fd31ac2
+t=2023-06-08T01:11:43-0400 lvl=info msg=start pg=/grpc/agent.Web/State id=98218994abe7e7b8
+t=2023-06-08T01:11:43-0400 lvl=info msg=end pg=/grpc/agent.Web/Preloaded id=472717f90fd31ac2 status=200 dur=287.5µs
+t=2023-06-08T01:11:44-0400 lvl=info msg=end pg=/grpc/agent.Web/State id=d91b7c4fd4e0a572 status=200 dur=772.549042ms
+t=2023-06-08T01:11:44-0400 lvl=info msg=end pg=/grpc/agent.Web/State id=8c3d8c4c20e66326 status=200 dur=1.176739042s
+t=2023-06-08T01:11:44-0400 lvl=info msg=start pg=/inspect/http id=38727ffe7556f475
+t=2023-06-08T01:11:44-0400 lvl=info msg=end pg=/inspect/http id=38727ffe7556f475 status=200 dur=227.167µs
+t=2023-06-08T01:11:44-0400 lvl=info msg=start pg=/grpc/agent.Web/Preloaded id=f94ac2460072ee3e
+t=2023-06-08T01:11:44-0400 lvl=info msg=start pg=/grpc/agent.Web/State id=8f0ce9c8dcc18bfc
+t=2023-06-08T01:11:44-0400 lvl=info msg=end pg=/grpc/agent.Web/Preloaded id=f94ac2460072ee3e status=200 dur=431.458µs
+t=2023-06-08T01:11:45-0400 lvl=info msg=end pg=/grpc/agent.Web/State id=98218994abe7e7b8 status=200 dur=1.32665725s
+t=2023-06-08T01:11:56-0400 lvl=info msg=start pg=/ id=7471471a448969ae
+t=2023-06-08T01:11:56-0400 lvl=info msg=end pg=/ id=7471471a448969ae status=302 dur=421.542µs
+t=2023-06-08T01:11:56-0400 lvl=info msg=start pg=/inspect/http id=4dab4e718bff9e6d
+t=2023-06-08T01:11:56-0400 lvl=info msg=end pg=/inspect/http id=4dab4e718bff9e6d status=200 dur=102.917µs
+t=2023-06-08T01:11:56-0400 lvl=info msg=start pg=/static/css/app.fe878db551fb56227c48.css id=a57f9a81c7754a81
+t=2023-06-08T01:11:56-0400 lvl=info msg=start pg=/static/js/vendor.29109f3a578dc3b2a02b.js id=9f9e4b2ed940340b
+t=2023-06-08T01:11:56-0400 lvl=info msg=start pg=/static/js/rpx.995b4951c0fd6b1fa875.js id=7cc0923c9c9e2448
+t=2023-06-08T01:11:56-0400 lvl=info msg=end pg=/static/js/rpx.995b4951c0fd6b1fa875.js id=7cc0923c9c9e2448 status=304 dur=266.25µs
+t=2023-06-08T01:11:56-0400 lvl=info msg=end pg=/static/css/app.fe878db551fb56227c48.css id=a57f9a81c7754a81 status=304 dur=758µs
+t=2023-06-08T01:11:56-0400 lvl=info msg=end pg=/static/js/vendor.29109f3a578dc3b2a02b.js id=9f9e4b2ed940340b status=304 dur=12.210542ms
+t=2023-06-08T01:11:56-0400 lvl=info msg=start pg=/static/js/app.de0db28a880159d23688.js id=e86dd6a993b18f34
+t=2023-06-08T01:11:56-0400 lvl=info msg=end pg=/static/js/app.de0db28a880159d23688.js id=e86dd6a993b18f34 status=304 dur=2.029875ms
+t=2023-06-08T01:11:56-0400 lvl=info msg=start pg=/grpc/agent.Web/Preloaded id=4102f23b81ca54cc
+t=2023-06-08T01:11:56-0400 lvl=info msg=end pg=/grpc/agent.Web/Preloaded id=4102f23b81ca54cc status=200 dur=327.875µs
+t=2023-06-08T01:11:56-0400 lvl=info msg=start pg=/grpc/agent.Web/State id=fba5d5ec2a02995e
+t=2023-06-08T01:11:57-0400 lvl=info msg=end pg=/grpc/agent.Web/State id=8f0ce9c8dcc18bfc status=200 dur=12.334091958s
+t=2023-06-08T01:12:01-0400 lvl=info msg="join connections" obj=join id=7fe48a81f5b5 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:02-0400 lvl=info msg=start pg=/static/assets/glyphicons-halflings-regular.woff2 id=ee00991f1b84a90c
+t=2023-06-08T01:12:02-0400 lvl=info msg=end pg=/static/assets/glyphicons-halflings-regular.woff2 id=ee00991f1b84a90c status=200 dur=218.917µs
+t=2023-06-08T01:12:02-0400 lvl=info msg="join connections" obj=join id=93be955e9e1a l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:02-0400 lvl=info msg="join connections" obj=join id=63004dccd7a1 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:02-0400 lvl=info msg="join connections" obj=join id=5221fb851593 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:02-0400 lvl=info msg="join connections" obj=join id=6ea57921f950 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:03-0400 lvl=info msg="join connections" obj=join id=071045948b8d l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:03-0400 lvl=info msg="join connections" obj=join id=e6e1a3d4aef4 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:46-0400 lvl=info msg="join connections" obj=join id=1e68e711bd49 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:46-0400 lvl=info msg="join connections" obj=join id=81c172a34f06 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:46-0400 lvl=info msg="join connections" obj=join id=baba8c7aca79 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:46-0400 lvl=info msg="join connections" obj=join id=8676927d2bd8 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:46-0400 lvl=info msg="join connections" obj=join id=baa370a5d316 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:47-0400 lvl=info msg="join connections" obj=join id=5f7b35ce7d05 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:51-0400 lvl=info msg="join connections" obj=join id=f9cee11fa56e l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:51-0400 lvl=info msg="join connections" obj=join id=e14a37eb20de l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:51-0400 lvl=info msg="join connections" obj=join id=35386cdaf71d l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:51-0400 lvl=info msg="join connections" obj=join id=40ea2abbcbf7 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:51-0400 lvl=info msg="join connections" obj=join id=513e6ecfeda3 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:51-0400 lvl=info msg="join connections" obj=join id=9f387d8fe904 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:51-0400 lvl=info msg="join connections" obj=join id=528c99fd0124 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:57-0400 lvl=info msg="join connections" obj=join id=30331ec85caa l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:57-0400 lvl=info msg="join connections" obj=join id=cd5df7da8340 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:57-0400 lvl=info msg="join connections" obj=join id=4adc78791151 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:57-0400 lvl=info msg="join connections" obj=join id=24e7275a6a3c l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:57-0400 lvl=info msg="join connections" obj=join id=8d8fae34a5f2 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:12:57-0400 lvl=info msg="join connections" obj=join id=0ce21a1f2429 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:13:10-0400 lvl=info msg="join connections" obj=join id=1401e6d46887 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:13:36-0400 lvl=info msg=end pg=/grpc/agent.Web/State id=fba5d5ec2a02995e status=200 dur=1m39.410908625s
+t=2023-06-08T01:16:41-0400 lvl=info msg="join connections" obj=join id=3981988bb92b l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:16:41-0400 lvl=info msg="join connections" obj=join id=da8fa1c64287 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:16:41-0400 lvl=info msg="join connections" obj=join id=8bd8ff91bf1a l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:16:41-0400 lvl=info msg="join connections" obj=join id=6bc72fdd4e45 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:16:41-0400 lvl=info msg="join connections" obj=join id=fe982a0bf618 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:16:41-0400 lvl=info msg="join connections" obj=join id=03c7affb2c29 l=127.0.0.1:8000 r=[2607:fa49:d945:5300:7c48:9181:4414:4fef]:59393
+t=2023-06-08T01:22:22-0400 lvl=eror msg="session closed, starting reconnect loop" obj=tunnels.session obj=csess id=b92a32078873 err="read tcp [2607:fa49:d945:5300:7c48:9181:4414:4fef]:59347->[2600:1f16:d83:1202::6e74:5]:443: read: connection reset by peer"
+t=2023-06-08T01:22:23-0400 lvl=info msg="client session established" obj=tunnels.session obj=csess id=b92a32078873
+t=2023-06-08T01:22:23-0400 lvl=info msg="tunnel session started" obj=tunnels.session
+t=2023-06-08T01:22:37-0400 lvl=eror msg="heartbeat timeout, terminating session" obj=tunnels.session obj=csess id=28965a63fddd clientid=f6f9fe2703978d6821f1aae6f1171eff
+t=2023-06-08T01:33:54-0400 lvl=eror msg="session closed, starting reconnect loop" obj=tunnels.session obj=csess id=b92a32078873 err="read tcp [2607:fa49:d945:5300:7c48:9181:4414:4fef]:59509->[2600:1f16:d83:1202::6e74:5]:443: read: connection reset by peer"
+t=2023-06-08T01:33:55-0400 lvl=info msg="client session established" obj=tunnels.session obj=csess id=b92a32078873
+t=2023-06-08T01:33:55-0400 lvl=info msg="tunnel session started" obj=tunnels.session
+t=2023-06-08T01:34:09-0400 lvl=eror msg="heartbeat timeout, terminating session" obj=tunnels.session obj=csess id=7de0a3092178 clientid=f6f9fe2703978d6821f1aae6f1171eff

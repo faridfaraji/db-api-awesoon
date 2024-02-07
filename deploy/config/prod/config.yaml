@@ -1,0 +1,3 @@
+redis_cluster:
+  url: "redis.internal.awesoon.tech"
+  port: "6379"
